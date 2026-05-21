@@ -1,38 +1,26 @@
 import { useEffect, useState } from "react";
-
 import axios from "axios";
 
 import PizzaCard from "../components/PizzaCard";
-
-import AdminDashboard
-from "../components/AdminDashboard";
-
-import OrdersAdmin
-from "../components/OrdersAdmin";
+import AdminDashboard from "../components/AdminDashboard";
+import OrdersAdmin from "../components/OrdersAdmin";
 
 function Home() {
 
-    const [pizzas, setPizzas] =
-        useState([]);
+    const [pizzas, setPizzas] = useState([]);
 
-    // load cart
-    const [cart, setCart] =
-        useState(() => {
+    const [cart, setCart] = useState(() => {
 
-            const savedCart =
-                localStorage.getItem(
-                    "cart"
-                );
+        const savedCart =
+            localStorage.getItem("cart");
 
-            return savedCart
-                ? JSON.parse(savedCart)
-                : [];
-        });
+        return savedCart
+            ? JSON.parse(savedCart)
+            : [];
+    });
 
     const userInfo = JSON.parse(
-        localStorage.getItem(
-            "userInfo"
-        )
+        localStorage.getItem("userInfo")
     );
 
     // fetch pizzas
@@ -45,9 +33,7 @@ function Home() {
                     "http://localhost:5000/api/pizzas"
                 );
 
-            setPizzas(
-                response.data
-            );
+            setPizzas(response.data);
 
         } catch (error) {
 
@@ -195,7 +181,7 @@ function Home() {
 
                 theme: {
                     color:
-                        "#3399cc",
+                        "#ff0077",
                 },
             };
 
@@ -217,137 +203,258 @@ function Home() {
     };
 
     return (
+
         <div
-            style={{
-                padding: "20px",
-            }}
+            className="
+            min-h-screen
+            bg-gradient-to-br
+            from-black
+            via-zinc-900
+            to-black
+            text-white
+            px-6
+            py-10
+            "
         >
 
-            {/* Pizzas */}
+            {/* HERO */}
+
+            <div className="text-center mb-16">
+
+                <h1
+                    className="
+                    text-7xl
+                    font-black
+                    tracking-wider
+                    bg-gradient-to-r
+                    from-pink-500
+                    via-red-500
+                    to-yellow-400
+                    bg-clip-text
+                    text-transparent
+                    drop-shadow-lg
+                    "
+                >
+                    PIZZA VERSE 🍕
+                </h1>
+
+                <p
+                    className="
+                    text-zinc-400
+                    mt-4
+                    text-lg
+                    tracking-wide
+                    "
+                >
+                    Neon powered pizza ordering experience
+                </p>
+
+            </div>
+
+            {/* PIZZAS */}
+
             <div
-                style={{
-                    display: "flex",
-                    gap: "20px",
-                    flexWrap: "wrap",
-                    justifyContent:
-                        "center",
-                }}
+                className="
+                flex
+                flex-wrap
+                justify-center
+                gap-10
+                "
             >
 
                 {pizzas.map(
                     (pizza) => (
+
                         <PizzaCard
-                            key={
-                                pizza._id
-                            }
-
+                            key={pizza._id}
                             pizza={pizza}
-
-                            addToCart={
-                                addToCart
-                            }
+                            addToCart={addToCart}
                         />
                     )
                 )}
 
             </div>
 
-            {/* Cart */}
-            <h2
-                style={{
-                    marginTop:
-                        "40px",
-                }}
+            {/* CART */}
+
+            <div
+                className="
+                mt-20
+                max-w-4xl
+                mx-auto
+                bg-zinc-900/60
+                backdrop-blur-lg
+                border
+                border-zinc-700
+                rounded-3xl
+                p-8
+                shadow-2xl
+                "
             >
-                Cart 🛒
-            </h2>
 
-            {cart.length === 0 ? (
+                <h2
+                    className="
+                    text-4xl
+                    font-bold
+                    mb-8
+                    text-center
+                    "
+                >
+                    Your Cart 🛒
+                </h2>
 
-                <p>
-                    Cart is empty
-                </p>
+                {cart.length === 0 ? (
 
-            ) : (
-
-                <div>
-
-                    {cart.map(
-                        (item) => (
-
-                            <div
-                                key={
-                                    item._id
-                                }
-
-                                style={{
-                                    border:
-                                        "1px solid gray",
-
-                                    padding:
-                                        "10px",
-
-                                    marginBottom:
-                                        "10px",
-                                }}
-                            >
-
-                                <h3>
-                                    {item.name}
-                                </h3>
-
-                                <p>
-                                    Qty:
-                                    {" "}
-                                    {
-                                        item.quantity
-                                    }
-                                </p>
-
-                                <p>
-                                    ₹
-                                    {item.price *
-                                        item.quantity}
-                                </p>
-
-                                <button
-                                    onClick={() =>
-                                        removeFromCart(
-                                            item._id
-                                        )
-                                    }
-                                >
-                                    Remove
-                                </button>
-
-                            </div>
-                        )
-                    )}
-
-                    <h2>
-                        Total:
-                        {" "}
-                        ₹{totalPrice}
-                    </h2>
-
-                    <button
-                        onClick={
-                            placeOrder
-                        }
+                    <p
+                        className="
+                        text-center
+                        text-zinc-400
+                        text-lg
+                        "
                     >
-                        Pay Now 💳
-                    </button>
+                        Cart is empty
+                    </p>
 
-                </div>
-            )}
+                ) : (
 
-            {/* Admin */}
+                    <div>
+
+                        {cart.map(
+                            (item) => (
+
+                                <div
+                                    key={item._id}
+
+                                    className="
+                                    flex
+                                    justify-between
+                                    items-center
+                                    bg-black/40
+                                    border
+                                    border-zinc-700
+                                    rounded-2xl
+                                    p-5
+                                    mb-4
+                                    "
+                                >
+
+                                    <div>
+
+                                        <h3
+                                            className="
+                                            text-2xl
+                                            font-semibold
+                                            "
+                                        >
+                                            {item.name}
+                                        </h3>
+
+                                        <p className="text-zinc-400">
+                                            Qty:
+                                            {" "}
+                                            {item.quantity}
+                                        </p>
+
+                                    </div>
+
+                                    <div className="text-right">
+
+                                        <p
+                                            className="
+                                            text-xl
+                                            font-bold
+                                            "
+                                        >
+                                            ₹
+                                            {item.price *
+                                                item.quantity}
+                                        </p>
+
+                                        <button
+                                            onClick={() =>
+                                                removeFromCart(
+                                                    item._id
+                                                )
+                                            }
+
+                                            className="
+                                            mt-3
+                                            bg-red-600
+                                            hover:bg-red-700
+                                            px-4
+                                            py-2
+                                            rounded-lg
+                                            transition
+                                            "
+                                        >
+                                            Remove
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            )
+                        )}
+
+                        <div
+                            className="
+                            mt-10
+                            text-center
+                            "
+                        >
+
+                            <h2
+                                className="
+                                text-5xl
+                                font-black
+                                mb-6
+                                "
+                            >
+                                Total:
+                                {" "}
+                                ₹{totalPrice}
+                            </h2>
+
+                            <button
+                                onClick={placeOrder}
+
+                                className="
+                                bg-gradient-to-r
+                                from-pink-500
+                                via-red-500
+                                to-yellow-500
+                                hover:scale-105
+                                transition
+                                duration-300
+                                px-10
+                                py-4
+                                rounded-2xl
+                                text-xl
+                                font-bold
+                                shadow-xl
+                                "
+                            >
+                                Pay Now 💳
+                            </button>
+
+                        </div>
+
+                    </div>
+                )}
+
+            </div>
+
+            {/* ADMIN */}
+
             {userInfo?.isAdmin && (
-                <>
+
+                <div className="mt-20">
+
                     <AdminDashboard />
 
                     <OrdersAdmin />
-                </>
+
+                </div>
             )}
 
         </div>

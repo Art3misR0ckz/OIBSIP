@@ -1,179 +1,158 @@
 import { useState } from "react";
 
-function PizzaCard({ pizza, addToCart }) {
+import CustomizePizzaModal
+from "./CustomizePizzaModal";
 
-    const [selectedBase, setSelectedBase] = useState(
-        pizza.baseOptions?.[0] || ""
-    );
+function PizzaCard({
 
-    const [selectedSauce, setSelectedSauce] = useState(
-        pizza.sauces?.[0] || ""
-    );
+    pizza,
+    addToCart,
 
-    const [selectedCheese, setSelectedCheese] = useState(
-        pizza.cheeses?.[0] || ""
-    );
+}) {
 
-    const [selectedVeggies, setSelectedVeggies] =
-        useState([]);
-
-    // handle veggie selection
-    const handleVeggies = (veggie) => {
-
-        if (selectedVeggies.includes(veggie)) {
-
-            setSelectedVeggies(
-                selectedVeggies.filter(
-                    (item) => item !== veggie
-                )
-            );
-
-        } else {
-
-            setSelectedVeggies([
-                ...selectedVeggies,
-                veggie,
-            ]);
-        }
-    };
-
-    // customized pizza object
-    const customizedPizza = {
-        ...pizza,
-        selectedBase,
-        selectedSauce,
-        selectedCheese,
-        selectedVeggies,
-    };
+    const [showModal,
+        setShowModal] =
+        useState(false);
 
     return (
-        <div
-            style={{
-                border: "1px solid gray",
-                padding: "15px",
-                width: "300px",
-                borderRadius: "10px",
-            }}
-        >
 
-            <img
-                src={pizza.image}
-                alt={pizza.name}
-                style={{
-                    width: "100%",
-                    height: "200px",
-                    objectFit: "cover",
-                    borderRadius: "10px",
-                }}
-            />
+        <>
 
-            <h2>{pizza.name}</h2>
-
-            <p>Price: ₹{pizza.price}</p>
-
-            {/* Base */}
-            <label>Base:</label>
-
-            <select
-                value={selectedBase}
-                onChange={(e) =>
-                    setSelectedBase(e.target.value)
-                }
+            <div
+                className="
+                bg-zinc-900
+                border
+                border-zinc-700
+                rounded-3xl
+                overflow-hidden
+                w-[300px]
+                shadow-xl
+                hover:scale-105
+                transition
+                duration-300
+                "
             >
-                {pizza.baseOptions?.map((base) => (
-                    <option
-                        key={base}
-                        value={base}
+
+                <img
+                    src={pizza.image}
+
+                    alt={pizza.name}
+
+                    className="
+                    w-full
+                    h-[220px]
+                    object-cover
+                    "
+                />
+
+                <div className="p-5">
+
+                    <h2
+                        className="
+                        text-3xl
+                        font-bold
+                        mb-2
+                        "
                     >
-                        {base}
-                    </option>
-                ))}
-            </select>
+                        {pizza.name}
+                    </h2>
 
-            <br /><br />
-
-            {/* Sauce */}
-            <label>Sauce:</label>
-
-            <select
-                value={selectedSauce}
-                onChange={(e) =>
-                    setSelectedSauce(e.target.value)
-                }
-            >
-                {pizza.sauces?.map((sauce) => (
-                    <option
-                        key={sauce}
-                        value={sauce}
+                    <p
+                        className="
+                        text-zinc-400
+                        mb-2
+                        "
                     >
-                        {sauce}
-                    </option>
-                ))}
-            </select>
+                        {pizza.category}
+                    </p>
 
-            <br /><br />
-
-            {/* Cheese */}
-            <label>Cheese:</label>
-
-            <select
-                value={selectedCheese}
-                onChange={(e) =>
-                    setSelectedCheese(e.target.value)
-                }
-            >
-                {pizza.cheeses?.map((cheese) => (
-                    <option
-                        key={cheese}
-                        value={cheese}
+                    <p
+                        className="
+                        text-2xl
+                        font-bold
+                        mb-5
+                        "
                     >
-                        {cheese}
-                    </option>
-                ))}
-            </select>
+                        ₹{pizza.price}
+                    </p>
 
-            <br /><br />
+                    <div
+                        className="
+                        flex
+                        flex-col
+                        gap-3
+                        "
+                    >
 
-            {/* Veggies */}
-            <label>Veggies:</label>
+                        {/* ADD TO CART */}
 
-            <div>
-
-                {pizza.veggies?.map((veggie) => (
-
-                    <div key={veggie}>
-
-                        <input
-                            type="checkbox"
-                            value={veggie}
-                            onChange={() =>
-                                handleVeggies(veggie)
+                        <button
+                            onClick={() =>
+                                addToCart(
+                                    pizza
+                                )
                             }
-                        />
 
-                        {veggie}
+                            className="
+                            bg-pink-600
+                            hover:bg-pink-700
+                            py-3
+                            rounded-xl
+                            font-bold
+                            "
+                        >
+                            Add To Cart 🛒
+                        </button>
+
+                        {/* CUSTOMIZE */}
+
+                        <button
+                            onClick={() =>
+                                setShowModal(
+                                    true
+                                )
+                            }
+
+                            className="
+                            border
+                            border-pink-500
+                            text-pink-400
+                            hover:bg-pink-500
+                            hover:text-white
+                            py-3
+                            rounded-xl
+                            font-bold
+                            transition
+                            "
+                        >
+                            Customize 🍕
+                        </button>
 
                     </div>
-                ))}
+
+                </div>
 
             </div>
 
-            <br />
+            {/* MODAL */}
 
-            <button
-                onClick={() =>
-                    addToCart(customizedPizza)
-                }
-                style={{
-                    padding: "10px",
-                    width: "100%",
-                    cursor: "pointer",
-                }}
-            >
-                Add To Cart
-            </button>
+            {showModal && (
 
-        </div>
+                <CustomizePizzaModal
+
+                    pizza={pizza}
+
+                    closeModal={() =>
+                        setShowModal(false)
+                    }
+
+                    addCustomizedPizza={
+                        addToCart
+                    }
+                />
+            )}
+
+        </>
     );
 }
 
