@@ -1,98 +1,33 @@
 import {
+
+    BrowserRouter,
+
     Routes,
+
     Route,
-    Link,
+
 } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
+
 import Home from "./pages/Home";
+
 import Login from "./pages/Login";
+
 import Register from "./pages/Register";
+
+import Admin from "./pages/Admin";
+
+import Orders from "./pages/Orders";
 
 function App() {
 
-    const userInfo = JSON.parse(
-        localStorage.getItem("userInfo")
-    );
-
-    const logoutHandler = () => {
-
-        localStorage.removeItem("token");
-
-        localStorage.removeItem("userInfo");
-
-        window.location.href = "/login";
-    };
-
     return (
-        <div>
 
-            {/* Navbar */}
-            <nav
-                style={{
-                    padding: "15px",
-                    borderBottom:
-                        "1px solid gray",
+        <BrowserRouter>
 
-                    display: "flex",
+            <Navbar />
 
-                    justifyContent:
-                        "space-between",
-
-                    alignItems: "center",
-                }}
-            >
-
-                <h2>
-                    Pizza App 🍕
-                </h2>
-
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "15px",
-                    }}
-                >
-
-                    <Link to="/">
-                        Home
-                    </Link>
-
-                    {!userInfo ? (
-
-                        <>
-                            <Link to="/login">
-                                Login
-                            </Link>
-
-                            <Link to="/register">
-                                Register
-                            </Link>
-                        </>
-
-                    ) : (
-
-                        <>
-                            <span>
-                                Hello,
-                                {" "}
-                                {userInfo.name}
-                            </span>
-
-                            <button
-                                onClick={
-                                    logoutHandler
-                                }
-                            >
-                                Logout
-                            </button>
-                        </>
-                    )}
-
-                </div>
-
-            </nav>
-
-            {/* Routes */}
             <Routes>
 
                 <Route
@@ -110,9 +45,19 @@ function App() {
                     element={<Register />}
                 />
 
+                <Route
+                    path="/admin"
+                    element={<Admin />}
+                />
+
+                <Route
+                    path="/orders"
+                    element={<Orders />}
+                />
+
             </Routes>
 
-        </div>
+        </BrowserRouter>
     );
 }
 

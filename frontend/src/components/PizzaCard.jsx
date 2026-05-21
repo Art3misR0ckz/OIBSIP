@@ -4,10 +4,8 @@ import CustomizePizzaModal
 from "./CustomizePizzaModal";
 
 function PizzaCard({
-
     pizza,
     addToCart,
-
 }) {
 
     const [showModal,
@@ -15,115 +13,51 @@ function PizzaCard({
         useState(false);
 
     return (
-
         <>
-
-            <div
-                className="
-                bg-zinc-900
-                border
-                border-zinc-700
-                rounded-3xl
-                overflow-hidden
-                w-[300px]
-                shadow-xl
-                hover:scale-105
-                transition
-                duration-300
-                "
-            >
+            <div className="pizza-card">
 
                 <img
                     src={pizza.image}
-
                     alt={pizza.name}
-
-                    className="
-                    w-full
-                    h-[220px]
-                    object-cover
-                    "
+                    className="pizza-image"
                 />
 
-                <div className="p-5">
+                <div className="pizza-content">
 
-                    <h2
-                        className="
-                        text-3xl
-                        font-bold
-                        mb-2
-                        "
-                    >
+                    <h2 className="pizza-name">
                         {pizza.name}
                     </h2>
 
-                    <p
-                        className="
-                        text-zinc-400
-                        mb-2
-                        "
-                    >
+                    <p className="pizza-category">
                         {pizza.category}
                     </p>
 
-                    <p
-                        className="
-                        text-2xl
-                        font-bold
-                        mb-5
-                        "
-                    >
+                    <p className="pizza-price">
                         ₹{pizza.price}
                     </p>
 
-                    <div
-                        className="
-                        flex
-                        flex-col
-                        gap-3
-                        "
-                    >
-
-                        {/* ADD TO CART */}
+                    <div className="btn-group">
 
                         <button
-                            onClick={() =>
-                                addToCart(
-                                    pizza
-                                )
-                            }
-
                             className="
-                            bg-pink-600
-                            hover:bg-pink-700
-                            py-3
-                            rounded-xl
-                            font-bold
+                            btn cart-btn
                             "
+
+                            onClick={() =>
+                                addToCart(pizza)
+                            }
                         >
                             Add To Cart 🛒
                         </button>
 
-                        {/* CUSTOMIZE */}
-
                         <button
-                            onClick={() =>
-                                setShowModal(
-                                    true
-                                )
-                            }
-
                             className="
-                            border
-                            border-pink-500
-                            text-pink-400
-                            hover:bg-pink-500
-                            hover:text-white
-                            py-3
-                            rounded-xl
-                            font-bold
-                            transition
+                            btn custom-btn
                             "
+
+                            onClick={() =>
+                                setShowModal(true)
+                            }
                         >
                             Customize 🍕
                         </button>
@@ -131,27 +65,19 @@ function PizzaCard({
                     </div>
 
                 </div>
-
             </div>
 
-            {/* MODAL */}
-
             {showModal && (
-
                 <CustomizePizzaModal
-
                     pizza={pizza}
-
                     closeModal={() =>
                         setShowModal(false)
                     }
-
                     addCustomizedPizza={
                         addToCart
                     }
                 />
             )}
-
         </>
     );
 }

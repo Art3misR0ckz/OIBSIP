@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import axios from "axios";
 
 function Register() {
@@ -12,9 +13,8 @@ function Register() {
     const [password, setPassword] =
         useState("");
 
-    const handleRegister = async (
-        e
-    ) => {
+    const handleRegister =
+        async (e) => {
 
         e.preventDefault();
 
@@ -22,7 +22,9 @@ function Register() {
 
             const response =
                 await axios.post(
+
                     "http://localhost:5000/api/auth/register",
+
                     {
                         name,
                         email,
@@ -31,15 +33,17 @@ function Register() {
                 );
 
             localStorage.setItem(
-                "token",
-                response.data.token
-            );
 
-            localStorage.setItem(
                 "userInfo",
+
                 JSON.stringify(
                     response.data
                 )
+            );
+
+            localStorage.setItem(
+                "token",
+                response.data.token
             );
 
             alert(
@@ -59,75 +63,70 @@ function Register() {
     };
 
     return (
-        <div
-            style={{
-                maxWidth: "400px",
-                margin: "50px auto",
-            }}
-        >
 
-            <h1>Register 📝</h1>
+        <div className="auth-page">
 
             <form
-                onSubmit={handleRegister}
+                className="auth-form"
+
+                onSubmit={
+                    handleRegister
+                }
             >
 
+                <h1>
+                    Register 📝
+                </h1>
+
                 <input
+
                     type="text"
+
                     placeholder="Name"
+
                     value={name}
+
                     onChange={(e) =>
                         setName(
                             e.target.value
                         )
                     }
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                    }}
                 />
 
                 <input
+
                     type="email"
+
                     placeholder="Email"
+
                     value={email}
+
                     onChange={(e) =>
                         setEmail(
                             e.target.value
                         )
                     }
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                    }}
                 />
 
                 <input
+
                     type="password"
+
                     placeholder="Password"
+
                     value={password}
+
                     onChange={(e) =>
                         setPassword(
                             e.target.value
                         )
                     }
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                    }}
                 />
 
-                <button
-                    type="submit"
-                    style={{
-                        padding: "10px",
-                        width: "100%",
-                    }}
-                >
+                <button type="submit">
+
                     Register
+
                 </button>
 
             </form>

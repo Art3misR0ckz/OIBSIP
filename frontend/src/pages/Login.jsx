@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import axios from "axios";
 
 function Login() {
@@ -9,9 +10,8 @@ function Login() {
     const [password, setPassword] =
         useState("");
 
-    const handleLogin = async (
-        e
-    ) => {
+    const handleLogin =
+        async (e) => {
 
         e.preventDefault();
 
@@ -19,7 +19,9 @@ function Login() {
 
             const response =
                 await axios.post(
+
                     "http://localhost:5000/api/auth/login",
+
                     {
                         email,
                         password,
@@ -27,15 +29,17 @@ function Login() {
                 );
 
             localStorage.setItem(
-                "token",
-                response.data.token
-            );
 
-            localStorage.setItem(
                 "userInfo",
+
                 JSON.stringify(
                     response.data
                 )
+            );
+
+            localStorage.setItem(
+                "token",
+                response.data.token
             );
 
             alert(
@@ -48,62 +52,62 @@ function Login() {
 
             console.log(error);
 
-            alert("Invalid Credentials");
+            alert(
+                "Invalid Credentials"
+            );
         }
     };
 
     return (
-        <div
-            style={{
-                maxWidth: "400px",
-                margin: "50px auto",
-            }}
-        >
 
-            <h1>Login 🔑</h1>
+        <div className="auth-page">
 
-            <form onSubmit={handleLogin}>
+            <form
+                className="auth-form"
+
+                onSubmit={
+                    handleLogin
+                }
+            >
+
+                <h1>
+                    Login 🔑
+                </h1>
 
                 <input
+
                     type="email"
+
                     placeholder="Email"
+
                     value={email}
+
                     onChange={(e) =>
                         setEmail(
                             e.target.value
                         )
                     }
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                    }}
                 />
 
                 <input
+
                     type="password"
+
                     placeholder="Password"
+
                     value={password}
+
                     onChange={(e) =>
                         setPassword(
                             e.target.value
                         )
                     }
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                    }}
                 />
 
-                <button
-                    type="submit"
-                    style={{
-                        padding: "10px",
-                        width: "100%",
-                    }}
-                >
+                <button type="submit">
+
                     Login
+
                 </button>
 
             </form>

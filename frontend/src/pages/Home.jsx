@@ -1,30 +1,27 @@
 import { useEffect, useState } from "react";
+
 import axios from "axios";
 
 import PizzaCard from "../components/PizzaCard";
-import AdminDashboard from "../components/AdminDashboard";
-import OrdersAdmin from "../components/OrdersAdmin";
 
 function Home() {
 
-    const [pizzas, setPizzas] = useState([]);
+    const [pizzas, setPizzas] =
+        useState([]);
 
-    const [cart, setCart] = useState(() => {
-
-        const savedCart =
-            localStorage.getItem("cart");
-
-        return savedCart
-            ? JSON.parse(savedCart)
-            : [];
-    });
+    const [cart, setCart] =
+        useState([]);
 
     const userInfo = JSON.parse(
-        localStorage.getItem("userInfo")
+        localStorage.getItem(
+            "userInfo"
+        )
     );
 
-    // fetch pizzas
-    const fetchPizzas = async () => {
+    // FETCH PIZZAS
+
+    const fetchPizzas =
+        async () => {
 
         try {
 
@@ -33,7 +30,9 @@ function Home() {
                     "http://localhost:5000/api/pizzas"
                 );
 
-            setPizzas(response.data);
+            setPizzas(
+                response.data
+            );
 
         } catch (error) {
 
@@ -42,39 +41,51 @@ function Home() {
     };
 
     useEffect(() => {
+
         fetchPizzas();
+
     }, []);
 
-    // save cart
-    useEffect(() => {
+    // ADD TO CART
 
-        localStorage.setItem(
-            "cart",
-            JSON.stringify(cart)
-        );
-
-    }, [cart]);
-
-    // add to cart
-    const addToCart = (pizza) => {
+    const addToCart =
+        (pizza) => {
 
         const existingPizza =
             cart.find(
+
                 (item) =>
-                    item._id === pizza._id
+
+                    item._id ===
+                    pizza._id &&
+
+                    JSON.stringify(
+                        item.extras
+                    ) ===
+
+                    JSON.stringify(
+                        pizza.extras
+                    ) &&
+
+                    item.size ===
+                    pizza.size
             );
 
         if (existingPizza) {
 
             const updatedCart =
                 cart.map((item) =>
-                    item._id === pizza._id
-                        ? {
-                            ...item,
-                            quantity:
-                                item.quantity + 1,
-                        }
-                        : item
+
+                    item === existingPizza
+
+                    ? {
+                        ...item,
+
+                        quantity:
+                            item.quantity + 1,
+                    }
+
+                    : item
                 );
 
             setCart(updatedCart);
@@ -82,46 +93,58 @@ function Home() {
         } else {
 
             setCart([
+
                 ...cart,
+
                 {
                     ...pizza,
+
                     quantity: 1,
                 },
             ]);
         }
     };
 
-    // remove item
+    // REMOVE ITEM
+
     const removeFromCart =
         (pizzaId) => {
 
-            const updatedCart =
-                cart.filter(
-                    (item) =>
-                        item._id !== pizzaId
-                );
+        const updatedCart =
+            cart.filter(
+                (item) =>
+                    item._id !== pizzaId
+            );
 
-            setCart(updatedCart);
-        };
+        setCart(updatedCart);
+    };
 
-    // total
+    // TOTAL PRICE
+
     const totalPrice =
         cart.reduce(
+
             (total, item) =>
+
                 total +
                 item.price *
                 item.quantity,
+
             0
         );
 
-    // payment
-    const placeOrder = async () => {
+    // PAYMENT
+
+    const placeOrder =
+        async () => {
 
         try {
 
             const response =
                 await axios.post(
+
                     "http://localhost:5000/api/payment/create-order",
+
                     {
                         amount:
                             totalPrice,
@@ -133,7 +156,8 @@ function Home() {
 
             const options = {
 
-                key: "rzp_test_Ss3qL9QJ39or03",
+                key:
+                    "rzp_test_Ss3qL9QJ39or03",
 
                 amount:
                     order.amount,
@@ -142,7 +166,7 @@ function Home() {
                     order.currency,
 
                 name:
-                    "Pizza App 🍕",
+                    "PizzaVerse 🍕",
 
                 description:
                     "Pizza Payment",
@@ -156,10 +180,17 @@ function Home() {
                         try {
 
                             await axios.post(
+
                                 "http://localhost:5000/api/orders",
+
                                 {
+
                                     items: cart,
+
                                     totalPrice,
+
+                                    userId:
+                                        userInfo._id,
                                 }
                             );
 
@@ -169,10 +200,6 @@ function Home() {
 
                             setCart([]);
 
-                            localStorage.removeItem(
-                                "cart"
-                            );
-
                         } catch (error) {
 
                             console.log(error);
@@ -181,7 +208,7 @@ function Home() {
 
                 theme: {
                     color:
-                        "#ff0077",
+                        "#ff0080",
                 },
             };
 
@@ -204,258 +231,224 @@ function Home() {
 
     return (
 
-        <div
-            className="
-            min-h-screen
-            bg-gradient-to-br
-            from-black
-            via-zinc-900
-            to-black
-            text-white
-            px-6
-            py-10
-            "
-        >
+        <div className="app">
 
             {/* HERO */}
 
-            <div className="text-center mb-16">
+            <div
+                style={{
+                    textAlign:
+                        "center",
 
-                <h1
-                    className="
-                    text-7xl
-                    font-black
-                    tracking-wider
-                    bg-gradient-to-r
-                    from-pink-500
-                    via-red-500
-                    to-yellow-400
-                    bg-clip-text
-                    text-transparent
-                    drop-shadow-lg
-                    "
-                >
-                    PIZZA VERSE 🍕
+                    marginBottom:
+                        "50px",
+                }}
+            >
+
+                <h1 className="title">
+
+                    PizzaVerse 🍕
+
                 </h1>
 
                 <p
-                    className="
-                    text-zinc-400
-                    mt-4
-                    text-lg
-                    tracking-wide
-                    "
+                    style={{
+                        color:
+                            "#b3b3b3",
+
+                        marginTop:
+                            "10px",
+
+                        fontSize:
+                            "1.1rem",
+                    }}
                 >
-                    Neon powered pizza ordering experience
+
+                    Cyberpunk Pizza Ordering Experience
+
                 </p>
 
             </div>
 
-            {/* PIZZAS */}
+            {/* PIZZA GRID */}
 
-            <div
-                className="
-                flex
-                flex-wrap
-                justify-center
-                gap-10
-                "
-            >
+            <div className="pizza-grid">
 
-                {pizzas.map(
-                    (pizza) => (
+                {pizzas.map((pizza) => (
 
-                        <PizzaCard
-                            key={pizza._id}
-                            pizza={pizza}
-                            addToCart={addToCart}
-                        />
-                    )
-                )}
+                    <PizzaCard
+
+                        key={pizza._id}
+
+                        pizza={pizza}
+
+                        addToCart={
+                            addToCart
+                        }
+                    />
+                ))}
 
             </div>
 
             {/* CART */}
 
-            <div
-                className="
-                mt-20
-                max-w-4xl
-                mx-auto
-                bg-zinc-900/60
-                backdrop-blur-lg
-                border
-                border-zinc-700
-                rounded-3xl
-                p-8
-                shadow-2xl
-                "
-            >
+            <div className="cart-section">
 
-                <h2
-                    className="
-                    text-4xl
-                    font-bold
-                    mb-8
-                    text-center
-                    "
-                >
+                <h2 className="cart-title">
+
                     Your Cart 🛒
+
                 </h2>
 
                 {cart.length === 0 ? (
 
-                    <p
-                        className="
-                        text-center
-                        text-zinc-400
-                        text-lg
-                        "
-                    >
+                    <p>
                         Cart is empty
                     </p>
 
                 ) : (
 
-                    <div>
+                    <>
+                        {cart.map((item) => (
 
-                        {cart.map(
-                            (item) => (
+                            <div
 
-                                <div
-                                    key={item._id}
+                                key={item._id}
 
-                                    className="
-                                    flex
-                                    justify-between
-                                    items-center
-                                    bg-black/40
-                                    border
-                                    border-zinc-700
-                                    rounded-2xl
-                                    p-5
-                                    mb-4
-                                    "
-                                >
+                                className="
+                                cart-item
+                                "
+                            >
 
-                                    <div>
+                                <div>
 
-                                        <h3
-                                            className="
-                                            text-2xl
-                                            font-semibold
-                                            "
-                                        >
-                                            {item.name}
-                                        </h3>
+                                    <h3>
+                                        {item.name}
+                                    </h3>
 
-                                        <p className="text-zinc-400">
-                                            Qty:
+                                    {/* SIZE */}
+
+                                    {item.size && (
+
+                                        <p>
+                                            Size:
                                             {" "}
-                                            {item.quantity}
+                                            {item.size}
                                         </p>
+                                    )}
 
-                                    </div>
+                                    {/* EXTRAS */}
 
-                                    <div className="text-right">
+                                    {item.extras &&
+                                        item.extras.length > 0 && (
 
-                                        <p
-                                            className="
-                                            text-xl
-                                            font-bold
-                                            "
-                                        >
-                                            ₹
-                                            {item.price *
-                                                item.quantity}
+                                        <p>
+
+                                            Extras:
+                                            {" "}
+
+                                            {item.extras.join(
+                                                ", "
+                                            )}
+
                                         </p>
+                                    )}
 
-                                        <button
-                                            onClick={() =>
-                                                removeFromCart(
-                                                    item._id
-                                                )
-                                            }
+                                    <p>
 
-                                            className="
-                                            mt-3
-                                            bg-red-600
-                                            hover:bg-red-700
-                                            px-4
-                                            py-2
-                                            rounded-lg
-                                            transition
-                                            "
-                                        >
-                                            Remove
-                                        </button>
+                                        Qty:
+                                        {" "}
 
-                                    </div>
+                                        {item.quantity}
+
+                                    </p>
 
                                 </div>
-                            )
-                        )}
+
+                                <div
+                                    style={{
+                                        textAlign:
+                                            "right",
+                                    }}
+                                >
+
+                                    <p>
+
+                                        ₹
+
+                                        {item.price *
+                                        item.quantity}
+
+                                    </p>
+
+                                    <button
+
+                                        className="
+                                        btn
+                                        custom-btn
+                                        "
+
+                                        onClick={() =>
+                                            removeFromCart(
+                                                item._id
+                                            )
+                                        }
+                                    >
+
+                                        Remove
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        ))}
+
+                        {/* TOTAL */}
+
+                        <div className="total">
+
+                            Total:
+                            {" "}
+
+                            ₹{totalPrice}
+
+                        </div>
+
+                        {/* PAY BUTTON */}
 
                         <div
-                            className="
-                            mt-10
-                            text-center
-                            "
+                            style={{
+                                marginTop:
+                                    "25px",
+
+                                textAlign:
+                                    "right",
+                            }}
                         >
 
-                            <h2
-                                className="
-                                text-5xl
-                                font-black
-                                mb-6
-                                "
-                            >
-                                Total:
-                                {" "}
-                                ₹{totalPrice}
-                            </h2>
-
                             <button
-                                onClick={placeOrder}
 
                                 className="
-                                bg-gradient-to-r
-                                from-pink-500
-                                via-red-500
-                                to-yellow-500
-                                hover:scale-105
-                                transition
-                                duration-300
-                                px-10
-                                py-4
-                                rounded-2xl
-                                text-xl
-                                font-bold
-                                shadow-xl
+                                btn
+                                cart-btn
                                 "
+
+                                onClick={
+                                    placeOrder
+                                }
                             >
+
                                 Pay Now 💳
+
                             </button>
 
                         </div>
 
-                    </div>
+                    </>
                 )}
 
             </div>
-
-            {/* ADMIN */}
-
-            {userInfo?.isAdmin && (
-
-                <div className="mt-20">
-
-                    <AdminDashboard />
-
-                    <OrdersAdmin />
-
-                </div>
-            )}
 
         </div>
     );

@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
 {
+    user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    },
+
+    
     items: [
         {
             name: String,
@@ -21,6 +27,7 @@ const orderSchema = new mongoose.Schema(
         required: true,
     },
 
+    
     status: {
         type: String,
         default: "Order Received",

@@ -8,358 +8,396 @@ function CustomizePizzaModal({
 
 }) {
 
-    const [base, setBase] =
-        useState("Thin Crust");
+    // SIZE
 
-    const [sauce, setSauce] =
-        useState("Tomato");
+    const [size, setSize] =
+        useState("Medium");
 
-    const [cheese, setCheese] =
-        useState("Mozzarella");
+    // TOPPINGS
 
-    const [veggies, setVeggies] =
+    const [extras, setExtras] =
         useState([]);
 
-    const veggieOptions = [
+    // PRICES
 
-        "Onion",
-        "Capsicum",
-        "Corn",
-        "Mushroom",
-        "Olives",
+    const sizePrices = {
 
-    ];
+        Small: 0,
+        Medium: 80,
+        Large: 150,
+    };
 
-    // toggle veggie
-    const handleVeggieChange =
-        (veggie) => {
+    const toppingPrices = {
 
-            if (
-                veggies.includes(veggie)
-            ) {
+        Cheese: 40,
+        Mushroom: 30,
+        Corn: 20,
+        Onion: 15,
+        Olives: 35,
+        Capsicum: 25,
+    };
 
-                setVeggies(
-                    veggies.filter(
-                        (v) => v !== veggie
-                    )
-                );
+    // HANDLE TOPPINGS
 
-            } else {
+    const toggleExtra =
+        (item) => {
 
-                setVeggies([
-                    ...veggies,
-                    veggie,
-                ]);
-            }
-        };
+        if (extras.includes(item)) {
 
-    // add customized pizza
-    const handleAdd =
-        () => {
-
-            const customizedPizza = {
-
-                ...pizza,
-
-                customizations: {
-                    base,
-                    sauce,
-                    cheese,
-                    veggies,
-                },
-
-                quantity: 1,
-            };
-
-            addCustomizedPizza(
-                customizedPizza
+            setExtras(
+                extras.filter(
+                    (extra) =>
+                        extra !== item
+                )
             );
 
-            closeModal();
+        } else {
+
+            setExtras([
+                ...extras,
+                item,
+            ]);
+        }
+    };
+
+    // TOTAL PRICE
+
+    const totalPrice =
+
+        pizza.price +
+
+        sizePrices[size] +
+
+        extras.reduce(
+
+            (total, item) =>
+
+                total +
+                toppingPrices[item],
+
+            0
+        );
+
+    // ADD CUSTOM PIZZA
+
+    const handleAddPizza =
+        () => {
+
+        const customizedPizza = {
+
+            ...pizza,
+
+            size,
+
+            extras,
+
+            price: totalPrice,
         };
+
+        addCustomizedPizza(
+            customizedPizza
+        );
+
+        closeModal();
+    };
 
     return (
 
         <div
-            className="
-            fixed
-            inset-0
-            bg-black/70
-            flex
-            justify-center
-            items-center
-            z-50
-            "
+
+            style={{
+
+                position: "fixed",
+
+                top: 0,
+                left: 0,
+
+                width: "100%",
+                height: "100%",
+
+                background:
+                    "rgba(0,0,0,0.7)",
+
+                display: "flex",
+
+                justifyContent:
+                    "center",
+
+                alignItems:
+                    "center",
+
+                zIndex: 999,
+            }}
         >
 
             <div
-                className="
-                bg-zinc-900
-                text-white
-                p-8
-                rounded-3xl
-                w-[500px]
-                border
-                border-zinc-700
-                shadow-2xl
-                "
+
+                style={{
+
+                    width: "450px",
+
+                    background:
+                        "#111827",
+
+                    padding: "30px",
+
+                    borderRadius:
+                        "25px",
+
+                    border:
+                        "1px solid rgba(255,255,255,0.1)",
+
+                    boxShadow:
+                        "0 0 30px rgba(255,0,150,0.3)",
+                }}
             >
 
                 <h2
-                    className="
-                    text-4xl
-                    font-bold
-                    mb-6
-                    text-center
-                    "
+
+                    style={{
+
+                        fontSize: "2rem",
+
+                        marginBottom:
+                            "25px",
+
+                        textAlign:
+                            "center",
+                    }}
                 >
+
                     Customize 🍕
+
                 </h2>
 
-                {/* BASE */}
+                {/* SIZE */}
 
-                <div className="mb-5">
+                <div
+                    style={{
+                        marginBottom:
+                            "25px",
+                    }}
+                >
 
-                    <label
-                        className="
-                        block
-                        mb-2
-                        text-lg
-                        "
-                    >
-                        Choose Base
-                    </label>
+                    <h3>
+                        Select Size
+                    </h3>
 
                     <select
-                        value={base}
+
+                        value={size}
 
                         onChange={(e) =>
-                            setBase(
+                            setSize(
                                 e.target.value
                             )
                         }
 
-                        className="
-                        w-full
-                        p-3
-                        rounded-xl
-                        bg-black
-                        border
-                        border-zinc-700
-                        "
+                        style={{
+
+                            width: "100%",
+
+                            padding: "12px",
+
+                            marginTop:
+                                "10px",
+
+                            borderRadius:
+                                "10px",
+
+                            background:
+                                "#1f2937",
+
+                            color: "white",
+
+                            border:
+                                "none",
+                        }}
                     >
 
                         <option>
-                            Thin Crust
+                            Small
                         </option>
 
                         <option>
-                            Cheese Burst
+                            Medium
                         </option>
 
                         <option>
-                            Pan Base
+                            Large
                         </option>
 
                     </select>
 
                 </div>
 
-                {/* SAUCE */}
+                {/* TOPPINGS */}
 
-                <div className="mb-5">
+                <div>
 
-                    <label
-                        className="
-                        block
-                        mb-2
-                        text-lg
-                        "
-                    >
-                        Choose Sauce
-                    </label>
-
-                    <select
-                        value={sauce}
-
-                        onChange={(e) =>
-                            setSauce(
-                                e.target.value
-                            )
-                        }
-
-                        className="
-                        w-full
-                        p-3
-                        rounded-xl
-                        bg-black
-                        border
-                        border-zinc-700
-                        "
-                    >
-
-                        <option>
-                            Tomato
-                        </option>
-
-                        <option>
-                            BBQ
-                        </option>
-
-                        <option>
-                            Peri Peri
-                        </option>
-
-                    </select>
-
-                </div>
-
-                {/* CHEESE */}
-
-                <div className="mb-5">
-
-                    <label
-                        className="
-                        block
-                        mb-2
-                        text-lg
-                        "
-                    >
-                        Choose Cheese
-                    </label>
-
-                    <select
-                        value={cheese}
-
-                        onChange={(e) =>
-                            setCheese(
-                                e.target.value
-                            )
-                        }
-
-                        className="
-                        w-full
-                        p-3
-                        rounded-xl
-                        bg-black
-                        border
-                        border-zinc-700
-                        "
-                    >
-
-                        <option>
-                            Mozzarella
-                        </option>
-
-                        <option>
-                            Cheddar
-                        </option>
-
-                        <option>
-                            Parmesan
-                        </option>
-
-                    </select>
-
-                </div>
-
-                {/* VEGGIES */}
-
-                <div className="mb-6">
-
-                    <label
-                        className="
-                        block
-                        mb-3
-                        text-lg
-                        "
-                    >
-                        Veggies
-                    </label>
+                    <h3>
+                        Extra Toppings
+                    </h3>
 
                     <div
-                        className="
-                        grid
-                        grid-cols-2
-                        gap-3
-                        "
+
+                        style={{
+
+                            display: "grid",
+
+                            gridTemplateColumns:
+                                "1fr 1fr",
+
+                            gap: "10px",
+
+                            marginTop:
+                                "15px",
+                        }}
                     >
 
-                        {veggieOptions.map(
-                            (veggie) => (
+                        {Object.keys(
+                            toppingPrices
+                        ).map((item) => (
 
-                                <label
-                                    key={veggie}
+                            <label
+                                key={item}
+                            >
 
-                                    className="
-                                    flex
-                                    items-center
-                                    gap-2
-                                    "
-                                >
+                                <input
 
-                                    <input
-                                        type="checkbox"
+                                    type="checkbox"
 
-                                        checked={
-                                            veggies.includes(
-                                                veggie
-                                            )
-                                        }
+                                    checked={
+                                        extras.includes(
+                                            item
+                                        )
+                                    }
 
-                                        onChange={() =>
-                                            handleVeggieChange(
-                                                veggie
-                                            )
-                                        }
-                                    />
+                                    onChange={() =>
+                                        toggleExtra(
+                                            item
+                                        )
+                                    }
+                                />
 
-                                    {veggie}
+                                {" "}
 
-                                </label>
-                            )
-                        )}
+                                {item}
+
+                                {" "}
+
+                                (+₹
+                                {
+                                    toppingPrices[
+                                        item
+                                    ]
+                                })
+
+                            </label>
+                        ))}
 
                     </div>
 
                 </div>
 
+                {/* PRICE */}
+
+                <h2
+
+                    style={{
+
+                        marginTop:
+                            "30px",
+
+                        textAlign:
+                            "center",
+
+                        color:
+                            "#ff0080",
+                    }}
+                >
+
+                    Total: ₹
+                    {totalPrice}
+
+                </h2>
+
                 {/* BUTTONS */}
 
                 <div
-                    className="
-                    flex
-                    gap-4
-                    "
+
+                    style={{
+
+                        display: "flex",
+
+                        gap: "15px",
+
+                        marginTop:
+                            "30px",
+                    }}
                 >
 
                     <button
-                        onClick={closeModal}
 
-                        className="
-                        flex-1
-                        bg-zinc-700
-                        hover:bg-zinc-600
-                        py-3
-                        rounded-xl
-                        "
+                        onClick={
+                            closeModal
+                        }
+
+                        style={{
+
+                            flex: 1,
+
+                            padding:
+                                "14px",
+
+                            borderRadius:
+                                "12px",
+
+                            border:
+                                "none",
+
+                            cursor:
+                                "pointer",
+                        }}
                     >
                         Cancel
                     </button>
 
                     <button
-                        onClick={handleAdd}
 
-                        className="
-                        flex-1
-                        bg-pink-600
-                        hover:bg-pink-700
-                        py-3
-                        rounded-xl
-                        font-bold
-                        "
+                        onClick={
+                            handleAddPizza
+                        }
+
+                        style={{
+
+                            flex: 1,
+
+                            padding:
+                                "14px",
+
+                            borderRadius:
+                                "12px",
+
+                            border:
+                                "none",
+
+                            background:
+                                "linear-gradient(90deg,#ff0080,#7928ca)",
+
+                            color:
+                                "white",
+
+                            fontWeight:
+                                "bold",
+
+                            cursor:
+                                "pointer",
+                        }}
                     >
+
                         Add Pizza 🍕
+
                     </button>
 
                 </div>
