@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 
+import OrdersAdmin
+from "../components/OrdersAdmin";
+
 function Admin() {
 
     const [pizzas, setPizzas] =
@@ -49,7 +52,6 @@ function Admin() {
 
             const response =
                 await axios.get(
-
                     "http://localhost:5000/api/pizzas"
                 );
 
@@ -106,7 +108,7 @@ function Admin() {
             console.log(error);
 
             alert(
-                "Failed to add pizza"
+                "Failed To Add Pizza"
             );
         }
     };
@@ -143,13 +145,19 @@ function Admin() {
             }}
         >
 
+            {/* TITLE */}
+
             <h1
                 style={{
+
                     textAlign:
                         "center",
 
                     marginBottom:
                         "40px",
+
+                    fontSize:
+                        "3rem",
                 }}
             >
 
@@ -157,7 +165,7 @@ function Admin() {
 
             </h1>
 
-            {/* ADD PIZZA */}
+            {/* ADD PIZZA FORM */}
 
             <form
 
@@ -166,7 +174,7 @@ function Admin() {
                 style={{
 
                     maxWidth:
-                        "500px",
+                        "600px",
 
                     margin:
                         "0 auto",
@@ -177,18 +185,32 @@ function Admin() {
                     flexDirection:
                         "column",
 
-                    gap: "15px",
+                    gap: "18px",
 
                     background:
                         "rgba(255,255,255,0.05)",
 
                     padding:
-                        "30px",
+                        "35px",
 
                     borderRadius:
-                        "20px",
+                        "25px",
+
+                    border:
+                        "1px solid rgba(255,255,255,0.1)",
                 }}
             >
+
+                <h2
+                    style={{
+                        textAlign:
+                            "center",
+                    }}
+                >
+
+                    Add New Pizza 🍕
+
+                </h2>
 
                 <input
 
@@ -203,6 +225,23 @@ function Admin() {
                             e.target.value
                         )
                     }
+
+                    style={{
+                        padding:
+                            "15px",
+
+                        borderRadius:
+                            "12px",
+
+                        border:
+                            "none",
+
+                        background:
+                            "#1f2937",
+
+                        color:
+                            "white",
+                    }}
                 />
 
                 <input
@@ -218,6 +257,23 @@ function Admin() {
                             e.target.value
                         )
                     }
+
+                    style={{
+                        padding:
+                            "15px",
+
+                        borderRadius:
+                            "12px",
+
+                        border:
+                            "none",
+
+                        background:
+                            "#1f2937",
+
+                        color:
+                            "white",
+                    }}
                 />
 
                 <input
@@ -233,6 +289,23 @@ function Admin() {
                             e.target.value
                         )
                     }
+
+                    style={{
+                        padding:
+                            "15px",
+
+                        borderRadius:
+                            "12px",
+
+                        border:
+                            "none",
+
+                        background:
+                            "#1f2937",
+
+                        color:
+                            "white",
+                    }}
                 />
 
                 <input
@@ -248,118 +321,181 @@ function Admin() {
                             e.target.value
                         )
                     }
+
+                    style={{
+                        padding:
+                            "15px",
+
+                        borderRadius:
+                            "12px",
+
+                        border:
+                            "none",
+
+                        background:
+                            "#1f2937",
+
+                        color:
+                            "white",
+                    }}
                 />
 
-                <button type="submit">
+                <button
 
-                    Add Pizza 🍕
+                    type="submit"
+
+                    style={{
+
+                        padding:
+                            "15px",
+
+                        border:
+                            "none",
+
+                        borderRadius:
+                            "14px",
+
+                        background:
+                            "linear-gradient(90deg,#ff0080,#7928ca)",
+
+                        color:
+                            "white",
+
+                        fontWeight:
+                            "bold",
+
+                        cursor:
+                            "pointer",
+
+                        fontSize:
+                            "1rem",
+                    }}
+                >
+
+                    Add Pizza 🚀
 
                 </button>
 
             </form>
 
-            {/* PIZZA LIST */}
+            {/* MANAGE PIZZAS */}
 
             <div
                 style={{
                     marginTop:
-                        "50px",
+                        "60px",
                 }}
             >
 
                 <h2
                     style={{
                         marginBottom:
-                            "20px",
+                            "25px",
+
+                        fontSize:
+                            "2rem",
                     }}
                 >
-                    Manage Pizzas
+
+                    Manage Pizzas 🍕
+
                 </h2>
 
-                {pizzas.map(
-                    (pizza) => (
+                {pizzas.map((pizza) => (
 
-                        <div
+                    <div
 
-                            key={pizza._id}
+                        key={pizza._id}
+
+                        style={{
+
+                            display:
+                                "flex",
+
+                            justifyContent:
+                                "space-between",
+
+                            alignItems:
+                                "center",
+
+                            background:
+                                "rgba(255,255,255,0.05)",
+
+                            padding:
+                                "20px",
+
+                            borderRadius:
+                                "18px",
+
+                            marginBottom:
+                                "18px",
+
+                            border:
+                                "1px solid rgba(255,255,255,0.08)",
+                        }}
+                    >
+
+                        <div>
+
+                            <h3>
+                                {pizza.name}
+                            </h3>
+
+                            <p>
+                                ₹
+                                {pizza.price}
+                            </p>
+
+                            <p>
+                                {
+                                    pizza.category
+                                }
+                            </p>
+
+                        </div>
+
+                        <button
+
+                            onClick={() =>
+                                deletePizza(
+                                    pizza._id
+                                )
+                            }
 
                             style={{
 
-                                display:
-                                    "flex",
+                                background:
+                                    "red",
 
-                                justifyContent:
-                                    "space-between",
+                                border:
+                                    "none",
 
-                                alignItems:
-                                    "center",
+                                color:
+                                    "white",
 
                                 padding:
-                                    "15px",
-
-                                background:
-                                    "rgba(255,255,255,0.05)",
-
-                                marginBottom:
-                                    "15px",
+                                    "12px 18px",
 
                                 borderRadius:
-                                    "15px",
+                                    "12px",
+
+                                cursor:
+                                    "pointer",
                             }}
                         >
 
-                            <div>
+                            Delete ❌
 
-                                <h3>
-                                    {pizza.name}
-                                </h3>
+                        </button>
 
-                                <p>
-                                    ₹
-                                    {pizza.price}
-                                </p>
-
-                            </div>
-
-                            <button
-
-                                onClick={() =>
-                                    deletePizza(
-                                        pizza._id
-                                    )
-                                }
-
-                                style={{
-
-                                    background:
-                                        "red",
-
-                                    color:
-                                        "white",
-
-                                    border:
-                                        "none",
-
-                                    padding:
-                                        "10px 15px",
-
-                                    borderRadius:
-                                        "10px",
-
-                                    cursor:
-                                        "pointer",
-                                }}
-                            >
-
-                                Delete
-
-                            </button>
-
-                        </div>
-                    )
-                )}
+                    </div>
+                ))}
 
             </div>
+
+            {/* ORDER MANAGEMENT */}
+
+            <OrdersAdmin />
 
         </div>
     );

@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
+
 import axios from "axios";
 
 function OrdersAdmin() {
 
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] =
+        useState([]);
 
-    // fetch orders
-    const fetchOrders = async () => {
+    // FETCH ORDERS
+
+    const fetchOrders =
+        async () => {
 
         try {
 
-            const response = await axios.get(
-                "http://localhost:5000/api/orders"
-            );
+            const response =
+                await axios.get(
+                    "http://localhost:5000/api/orders"
+                );
 
-            setOrders(response.data);
+            setOrders(
+                response.data
+            );
 
         } catch (error) {
 
@@ -23,115 +30,199 @@ function OrdersAdmin() {
     };
 
     useEffect(() => {
+
         fetchOrders();
+
     }, []);
 
-    // update order status
-    const updateStatus = async (
-        orderId,
-        status
-    ) => {
+    // UPDATE STATUS
+
+    const updateStatus =
+        async (id, status) => {
 
         try {
 
             await axios.put(
-                `http://localhost:5000/api/orders/${orderId}`,
+
+                `http://localhost:5000/api/orders/${id}`,
+
                 { status }
             );
 
-            alert("Status Updated 🚚");
+            alert(
+                "Status Updated 🚚"
+            );
 
             fetchOrders();
 
         } catch (error) {
 
             console.log(error);
-
-            alert("Update failed");
         }
     };
 
     return (
+
         <div
             style={{
                 marginTop: "50px",
-                padding: "20px",
-                border: "1px solid gray",
-                borderRadius: "10px",
             }}
         >
 
-            <h2>
-                Orders Management 📦
-            </h2>
+            <h1
+                style={{
+                    marginBottom:
+                        "30px",
+                }}
+            >
 
-            {orders.length === 0 ? (
+                Manage Orders 📦
 
-                <p>No Orders Yet</p>
+            </h1>
 
-            ) : (
+            {orders.map((order) => (
 
-                orders.map((order) => (
+                <div
+
+                    key={order._id}
+
+                    style={{
+
+                        background:
+                            "rgba(255,255,255,0.05)",
+
+                        padding:
+                            "25px",
+
+                        borderRadius:
+                            "20px",
+
+                        marginBottom:
+                            "25px",
+                    }}
+                >
+
+                    <h2>
+
+                        Order ID:
+                        {" "}
+
+                        {order._id}
+
+                    </h2>
+
+                    <p
+                        style={{
+                            marginTop:
+                                "10px",
+                        }}
+                    >
+
+                        Total:
+                        {" "}
+
+                        ₹
+                        {order.totalPrice}
+
+                    </p>
+
+                    {/* ITEMS */}
 
                     <div
-                        key={order._id}
                         style={{
-                            border: "1px solid gray",
-                            padding: "15px",
-                            marginTop: "20px",
-                            borderRadius: "10px",
+                            marginTop:
+                                "20px",
+                        }}
+                    >
+
+                        {order.items.map(
+                            (
+                                item,
+                                index
+                            ) => (
+
+                                <p
+                                    key={index}
+                                >
+
+                                    {item.name}
+
+                                    {" "}
+
+                                    ×
+
+                                    {" "}
+
+                                    {item.quantity}
+
+                                </p>
+                            )
+                        )}
+
+                    </div>
+
+                    {/* STATUS */}
+
+                    <div
+                        style={{
+                            marginTop:
+                                "20px",
                         }}
                     >
 
                         <h3>
-                            Order ID:
+
+                            Current Status:
+                            {" "}
+
+                            <span
+                                style={{
+                                    color:
+                                        "#ff0080",
+                                }}
+                            >
+
+                                {order.status}
+
+                            </span>
+
                         </h3>
 
-                        <p>
-                            {order._id}
-                        </p>
-
-                        <h4>Status:</h4>
-
-                        <p>
-                            {order.status}
-                        </p>
-
-                        <h4>Items:</h4>
-
-                        {order.items.map((item, index) => (
-
-                            <div key={index}>
-
-                                <p>
-                                    {item.name}
-                                    {" "}
-                                    ×
-                                    {" "}
-                                    {item.quantity}
-                                </p>
-
-                            </div>
-                        ))}
-
-                        <h4>
-                            Total:
-                            {" "}
-                            ₹{order.totalPrice}
-                        </h4>
-
                         <select
+
+                            style={{
+
+                                marginTop:
+                                    "15px",
+
+                                padding:
+                                    "12px",
+
+                                borderRadius:
+                                    "10px",
+
+                                background:
+                                    "#1f2937",
+
+                                color:
+                                    "white",
+
+                                border:
+                                    "none",
+                            }}
+
+                            value={
+                                order.status
+                            }
+
                             onChange={(e) =>
                                 updateStatus(
+
                                     order._id,
+
                                     e.target.value
                                 )
                             }
-                            value={order.status}
-                            style={{
-                                marginTop: "10px",
-                                padding: "8px",
-                            }}
                         >
 
                             <option>
@@ -153,8 +244,9 @@ function OrdersAdmin() {
                         </select>
 
                     </div>
-                ))
-            )}
+
+                </div>
+            ))}
 
         </div>
     );

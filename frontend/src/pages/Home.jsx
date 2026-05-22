@@ -264,7 +264,7 @@ function Home() {
                     }}
                 >
 
-                    Cyberpunk Pizza Ordering Experience
+                    Crazzyy Pizza Ordering Experience
 
                 </p>
 
@@ -442,6 +442,49 @@ function Home() {
                                 Pay Now 💳
 
                             </button>
+
+
+                            <button
+                                className="
+                                btn
+                                custom-btn
+                                "
+
+                                style={{
+                                     marginTop: "15px",
+                                     width: "100%",
+                                }}
+
+                                onClick={async () => {
+                                    try {
+                                         await axios.post(
+                                            "http://localhost:5000/api/orders",
+                                            {
+                                                items: cart,
+                                                totalPrice,
+                                                userId: userInfo._id,
+                                            }
+                                        );
+
+                                        alert("Fake Test Order Added 🚀");
+
+                                        setCart([]);
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+                                }}
+                            >
+                                Fake Order (DEV MODE) 🧪
+                            </button>
+    
+
+
+
+
+
+
+
+
 
                         </div>
 

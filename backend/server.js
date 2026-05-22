@@ -3,6 +3,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 
+const inventoryRoutes =
+require("./routes/inventoryRoutes");
+
 dotenv.config();
 
 
@@ -38,6 +41,7 @@ app.use(
     "/api/payment",
     paymentRoutes
 );
+app.use("/api/inventory", inventoryRoutes);
 
 // test route
 app.get("/", (req, res) => {
