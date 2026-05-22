@@ -5,6 +5,9 @@ import axios from "axios";
 import OrdersAdmin
 from "../components/OrdersAdmin";
 
+import InventoryAdmin
+from "../components/InventoryAdmin";
+
 function Admin() {
 
     const [pizzas, setPizzas] =
@@ -495,6 +498,7 @@ function Admin() {
 
             {/* ORDER MANAGEMENT */}
 
+            <InventoryAdmin />
             <OrdersAdmin />
 
         </div>
