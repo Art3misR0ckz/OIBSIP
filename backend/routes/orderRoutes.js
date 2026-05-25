@@ -4,6 +4,9 @@ const router = express.Router();
 
 const Order = require("../models/Order");
 
+const Inventory =
+require("../models/Inventory");
+
 // PLACE ORDER
 router.post("/", async (req, res) => {
 
@@ -25,6 +28,97 @@ router.post("/", async (req, res) => {
         });
     }
 });
+
+// AUTO REDUCE INVENTORY
+
+for (const item of items) {
+
+    // BASE
+
+    if (item.base) {
+
+        const base =
+            await Inventory.findOne({
+
+                ingredient:
+                    item.base,
+            });
+
+        if (base) {
+
+            base.stock -= 1;
+
+            await base.save();
+        }
+    }
+
+    // SAUCE
+
+    if (item.sauce) {
+
+        const sauce =
+            await Inventory.findOne({
+
+                ingredient:
+                    item.sauce,
+            });
+
+        if (sauce) {
+
+            sauce.stock -= 1;
+
+            await sauce.save();
+        }
+    }
+
+    // CHEESE
+
+    if (item.cheese) {
+
+        const cheese =
+            await Inventory.findOne({
+
+                ingredient:
+                    item.cheese,
+            });
+
+        if (cheese) {
+
+            cheese.stock -= 1;
+
+            await cheese.save();
+        }
+    }
+
+    // VEGGIES
+
+    if (
+        item.veggies &&
+        item.veggies.length > 0
+    ) {
+
+        for (
+            const veggie
+            of item.veggies
+        ) {
+
+            const veg =
+                await Inventory.findOne({
+
+                    ingredient:
+                        veggie,
+                });
+
+            if (veg) {
+
+                veg.stock -= 1;
+
+                await veg.save();
+            }
+        }
+    }
+}
+
 
 // GET ORDERS
 router.get("/", async (req, res) => {
