@@ -48,27 +48,24 @@ function Home() {
 
     // ADD TO CART
 
-    const addToCart =
-        (pizza) => {
+    const addToCart = (
+        pizza
+    ) => {
 
         const existingPizza =
             cart.find(
 
                 (item) =>
 
-                    item._id ===
-                    pizza._id &&
+                    item._id === pizza._id &&
 
-                    JSON.stringify(
-                        item.extras
-                    ) ===
+                    item.size === pizza.size &&
 
-                    JSON.stringify(
-                        pizza.extras
-                    ) &&
+                    item.base === pizza.base &&
 
-                    item.size ===
-                    pizza.size
+                    item.sauce === pizza.sauce &&
+
+                    item.cheese === pizza.cheese
             );
 
         if (existingPizza) {
@@ -78,14 +75,15 @@ function Home() {
 
                     item === existingPizza
 
-                    ? {
-                        ...item,
+                        ? {
 
-                        quantity:
-                            item.quantity + 1,
-                    }
+                            ...item,
 
-                    : item
+                            quantity:
+                                item.quantity + 1,
+                        }
+
+                        : item
                 );
 
             setCart(updatedCart);
@@ -326,28 +324,63 @@ function Home() {
                                         {item.name}
                                     </h3>
 
-                                    {/* SIZE */}
-
                                     {item.size && (
 
                                         <p>
+
                                             Size:
                                             {" "}
+
                                             {item.size}
+
                                         </p>
                                     )}
 
-                                    {/* EXTRAS */}
-
-                                    {item.extras &&
-                                        item.extras.length > 0 && (
+                                    {item.base && (
 
                                         <p>
 
-                                            Extras:
+                                            Base:
                                             {" "}
 
-                                            {item.extras.join(
+                                            {item.base}
+
+                                        </p>
+                                    )}
+
+                                    {item.sauce && (
+
+                                        <p>
+
+                                            Sauce:
+                                            {" "}
+
+                                            {item.sauce}
+
+                                        </p>
+                                    )}
+
+                                    {item.cheese && (
+
+                                        <p>
+
+                                            Cheese:
+                                            {" "}
+
+                                            {item.cheese}
+
+                                        </p>
+                                    )}
+
+                                    {item.veggies &&
+                                        item.veggies.length > 0 && (
+
+                                        <p>
+
+                                            Veggies:
+                                            {" "}
+
+                                            {item.veggies.join(
                                                 ", "
                                             )}
 
@@ -443,48 +476,59 @@ function Home() {
 
                             </button>
 
+                            {/* DEV MODE */}
 
                             <button
+
                                 className="
                                 btn
                                 custom-btn
                                 "
 
                                 style={{
-                                     marginTop: "15px",
-                                     width: "100%",
+                                    marginTop:
+                                        "15px",
+
+                                    width:
+                                        "100%",
                                 }}
 
                                 onClick={async () => {
+
                                     try {
-                                         await axios.post(
+
+                                        await axios.post(
+
                                             "http://localhost:5000/api/orders",
+
                                             {
-                                                items: cart,
+
+                                                items:
+                                                    cart,
+
                                                 totalPrice,
-                                                userId: userInfo._id,
+
+                                                userId:
+                                                    userInfo._id,
                                             }
                                         );
 
-                                        alert("Fake Test Order Added 🚀");
+                                        alert(
+                                            "Fake Test Order Added 🚀"
+                                        );
 
                                         setCart([]);
+
                                     } catch (error) {
+
                                         console.log(error);
                                     }
                                 }}
                             >
+
                                 Fake Order (DEV MODE) 🧪
+
                             </button>
-    
-
-
-
-
-
-
-
-
 
                         </div>
 

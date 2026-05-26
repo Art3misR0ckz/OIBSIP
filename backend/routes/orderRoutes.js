@@ -29,7 +29,10 @@ router.post(
 
             // AUTO REDUCE INVENTORY
 
-            for (const item of req.body.items) {
+            for (
+                const item
+                of req.body.items
+            ) {
 
                 // BASE
 
@@ -38,8 +41,18 @@ router.post(
                     const base =
                         await Inventory.findOne({
 
-                            ingredient:
-                                item.base,
+                            ingredient: {
+
+                                $regex:
+                                    new RegExp(
+
+                                        "^" +
+                                        item.base +
+                                        "$",
+
+                                        "i"
+                                    ),
+                            },
                         });
 
                     if (base) {
@@ -50,6 +63,7 @@ router.post(
                     }
                 }
 
+
                 // SAUCE
 
                 if (item.sauce) {
@@ -57,8 +71,18 @@ router.post(
                     const sauce =
                         await Inventory.findOne({
 
-                            ingredient:
-                                item.sauce,
+                            ingredient: {
+
+                                $regex:
+                                    new RegExp(
+
+                                        "^" +
+                                        item.sauce +
+                                        "$",
+
+                                        "i"
+                                    ),
+                            },
                         });
 
                     if (sauce) {
@@ -69,6 +93,7 @@ router.post(
                     }
                 }
 
+
                 // CHEESE
 
                 if (item.cheese) {
@@ -76,8 +101,18 @@ router.post(
                     const cheese =
                         await Inventory.findOne({
 
-                            ingredient:
-                                item.cheese,
+                            ingredient: {
+
+                                $regex:
+                                    new RegExp(
+
+                                        "^" +
+                                        item.cheese +
+                                        "$",
+
+                                        "i"
+                                    ),
+                            },
                         });
 
                     if (cheese) {
@@ -88,10 +123,13 @@ router.post(
                     }
                 }
 
+
                 // VEGGIES
 
                 if (
+
                     item.veggies &&
+
                     item.veggies.length > 0
                 ) {
 
@@ -103,8 +141,18 @@ router.post(
                         const veg =
                             await Inventory.findOne({
 
-                                ingredient:
-                                    veggie,
+                                ingredient: {
+
+                                    $regex:
+                                        new RegExp(
+
+                                            "^" +
+                                            veggie +
+                                            "$",
+
+                                            "i"
+                                        ),
+                                },
                             });
 
                         if (veg) {
@@ -122,6 +170,8 @@ router.post(
             );
 
         } catch (error) {
+
+            console.log(error);
 
             res.status(500).json({
 
@@ -193,6 +243,52 @@ router.put(
             res.json(
                 updatedOrder
             );
+
+        } catch (error) {
+
+            res.status(500).json({
+
+                message:
+                    error.message,
+            });
+        }
+    }
+);
+
+// DELETE ORDER
+
+router.delete(
+    "/:id",
+
+    async (req, res) => {
+
+        try {
+
+            const order =
+                await Order.findById(
+                    req.params.id
+                );
+
+            if (!order) {
+
+                return res
+                    .status(404)
+                    .json({
+
+                        message:
+                            "Order not found",
+                    });
+            }
+
+            await Order.findByIdAndDelete(
+                req.params.id
+            );
+
+            res.json({
+
+                message:
+                    "Order deleted successfully",
+            });
 
         } catch (error) {
 

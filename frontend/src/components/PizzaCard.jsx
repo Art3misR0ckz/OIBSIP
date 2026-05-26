@@ -1,78 +1,186 @@
-import { useState } from "react";
+import { useState }
+from "react";
 
 import CustomizePizzaModal
 from "./CustomizePizzaModal";
 
 function PizzaCard({
+
     pizza,
     addToCart,
+
 }) {
 
-    const [showModal,
-        setShowModal] =
+    const [showCustomize,
+        setShowCustomize] =
         useState(false);
 
     return (
+
         <>
-            <div className="pizza-card">
+            <div
+                style={{
+
+                    background:
+                        "rgba(255,255,255,0.05)",
+
+                    borderRadius:
+                        "25px",
+
+                    overflow:
+                        "hidden",
+
+                    boxShadow:
+                        "0 0 25px rgba(255,0,150,0.2)",
+
+                    transition:
+                        "0.3s",
+
+                    border:
+                        "1px solid rgba(255,255,255,0.08)",
+                }}
+            >
+
+                {/* IMAGE */}
 
                 <img
+
                     src={pizza.image}
+
                     alt={pizza.name}
-                    className="pizza-image"
+
+                    style={{
+
+                        width: "100%",
+
+                        height: "220px",
+
+                        objectFit:
+                            "cover",
+                    }}
                 />
 
-                <div className="pizza-content">
 
-                    <h2 className="pizza-name">
+                {/* CONTENT */}
+
+                <div
+                    style={{
+
+                        padding:
+                            "20px",
+                    }}
+                >
+
+                    <h2
+                        style={{
+
+                            fontSize:
+                                "2rem",
+
+                            marginBottom:
+                                "10px",
+                        }}
+                    >
+
                         {pizza.name}
+
                     </h2>
 
-                    <p className="pizza-category">
+                    <p
+                        style={{
+
+                            color:
+                                "#ccc",
+
+                            marginBottom:
+                                "10px",
+                        }}
+                    >
+
                         {pizza.category}
+
                     </p>
 
-                    <p className="pizza-price">
+                    <h3
+                        style={{
+
+                            marginBottom:
+                                "20px",
+
+                            fontSize:
+                                "2rem",
+                        }}
+                    >
+
                         ₹{pizza.price}
-                    </p>
 
-                    <div className="btn-group">
+                    </h3>
 
-                        <button
-                            className="
-                            btn cart-btn
-                            "
 
-                            onClick={() =>
-                                addToCart(pizza)
-                            }
-                        >
-                            Add To Cart 🛒
-                        </button>
+                    {/* BUTTON */}
 
-                        <button
-                            className="
-                            btn custom-btn
-                            "
+                    <button
 
-                            onClick={() =>
-                                setShowModal(true)
-                            }
-                        >
-                            Customize 🍕
-                        </button>
+                        onClick={() =>
+                            setShowCustomize(
+                                true
+                            )
+                        }
 
-                    </div>
+                        style={{
+
+                            width:
+                                "100%",
+
+                            padding:
+                                "15px",
+
+                            border:
+                                "none",
+
+                            borderRadius:
+                                "12px",
+
+                            background:
+                                "linear-gradient(90deg,#ff0080,#7928ca)",
+
+                            color:
+                                "white",
+
+                            fontSize:
+                                "18px",
+
+                            fontWeight:
+                                "bold",
+
+                            cursor:
+                                "pointer",
+                        }}
+                    >
+
+                        Add To Cart 🛒
+
+                    </button>
 
                 </div>
             </div>
 
-            {showModal && (
+
+            {/* CUSTOMIZE MODAL */}
+
+            {
+                showCustomize && (
+
                 <CustomizePizzaModal
+
                     pizza={pizza}
+
                     closeModal={() =>
-                        setShowModal(false)
+                        setShowCustomize(
+                            false
+                        )
                     }
+
                     addCustomizedPizza={
                         addToCart
                     }

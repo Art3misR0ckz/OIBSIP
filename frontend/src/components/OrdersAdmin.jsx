@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState }
+from "react";
 
 import axios from "axios";
 
@@ -16,6 +17,7 @@ function OrdersAdmin() {
 
             const response =
                 await axios.get(
+
                     "http://localhost:5000/api/orders"
                 );
 
@@ -34,6 +36,7 @@ function OrdersAdmin() {
         fetchOrders();
 
     }, []);
+
 
     // UPDATE STATUS
 
@@ -61,16 +64,45 @@ function OrdersAdmin() {
         }
     };
 
+
+    // DELETE ORDER
+
+    const deleteOrder =
+        async (id) => {
+
+        try {
+
+            await axios.delete(
+
+                `http://localhost:5000/api/orders/${id}`
+            );
+
+            alert(
+                "Order Deleted 🗑"
+            );
+
+            fetchOrders();
+
+        } catch (error) {
+
+            console.log(error);
+        }
+    };
+
+
     return (
 
         <div
             style={{
-                marginTop: "50px",
+
+                marginTop:
+                    "50px",
             }}
         >
 
             <h1
                 style={{
+
                     marginBottom:
                         "30px",
                 }}
@@ -79,6 +111,7 @@ function OrdersAdmin() {
                 Manage Orders 📦
 
             </h1>
+
 
             {orders.map((order) => (
 
@@ -99,8 +132,13 @@ function OrdersAdmin() {
 
                         marginBottom:
                             "25px",
+
+                        boxShadow:
+                            "0 0 20px rgba(255,0,150,0.1)",
                     }}
                 >
+
+                    {/* ORDER ID */}
 
                     <h2>
 
@@ -111,10 +149,17 @@ function OrdersAdmin() {
 
                     </h2>
 
+
+                    {/* TOTAL */}
+
                     <p
                         style={{
+
                             marginTop:
                                 "10px",
+
+                            fontSize:
+                                "18px",
                         }}
                     >
 
@@ -126,47 +171,142 @@ function OrdersAdmin() {
 
                     </p>
 
+
                     {/* ITEMS */}
 
                     <div
                         style={{
+
                             marginTop:
                                 "20px",
                         }}
                     >
 
+                        <h3
+                            style={{
+
+                                marginBottom:
+                                    "10px",
+                            }}
+                        >
+
+                            Ordered Items 🍕
+
+                        </h3>
+
                         {order.items.map(
+
                             (
                                 item,
                                 index
                             ) => (
 
-                                <p
+                                <div
                                     key={index}
+
+                                    style={{
+
+                                        marginBottom:
+                                            "10px",
+
+                                        padding:
+                                            "10px",
+
+                                        background:
+                                            "rgba(255,255,255,0.03)",
+
+                                        borderRadius:
+                                            "10px",
+                                    }}
                                 >
 
-                                    {item.name}
+                                    <p>
 
-                                    {" "}
+                                        <strong>
+                                            {item.name}
+                                        </strong>
 
-                                    ×
+                                        {" "}
 
-                                    {" "}
+                                        ×
 
-                                    {item.quantity}
+                                        {" "}
 
-                                </p>
+                                        {item.quantity}
+
+                                    </p>
+
+                                    <p>
+
+                                        Size:
+                                        {" "}
+
+                                        {
+                                            item.size
+                                        }
+
+                                    </p>
+
+                                    <p>
+
+                                        Base:
+                                        {" "}
+
+                                        {
+                                            item.base
+                                        }
+
+                                    </p>
+
+                                    <p>
+
+                                        Sauce:
+                                        {" "}
+
+                                        {
+                                            item.sauce
+                                        }
+
+                                    </p>
+
+                                    <p>
+
+                                        Cheese:
+                                        {" "}
+
+                                        {
+                                            item.cheese
+                                        }
+
+                                    </p>
+
+                                    <p>
+
+                                        Veggies:
+                                        {" "}
+
+                                        {
+                                            item.veggies?.join(
+                                                ", "
+                                            )
+                                        }
+
+                                    </p>
+
+                                </div>
                             )
                         )}
 
                     </div>
 
+
                     {/* STATUS */}
 
                     <div
                         style={{
+
                             marginTop:
-                                "20px",
+                                "25px",
                         }}
                     >
 
@@ -177,16 +317,20 @@ function OrdersAdmin() {
 
                             <span
                                 style={{
+
                                     color:
                                         "#ff0080",
                                 }}
                             >
 
-                                {order.status}
+                                {
+                                    order.status
+                                }
 
                             </span>
 
                         </h3>
+
 
                         <select
 
@@ -242,6 +386,57 @@ function OrdersAdmin() {
                             </option>
 
                         </select>
+
+
+                        {/* DELETE BUTTON */}
+
+                        {
+                            order.status ===
+                            "Delivered" && (
+
+                            <button
+
+                                onClick={() =>
+                                    deleteOrder(
+                                        order._id
+                                    )
+                                }
+
+                                style={{
+
+                                    marginTop:
+                                        "20px",
+
+                                    marginLeft:
+                                        "15px",
+
+                                    padding:
+                                        "12px 20px",
+
+                                    background:
+                                        "#ff0033",
+
+                                    color:
+                                        "white",
+
+                                    border:
+                                        "none",
+
+                                    borderRadius:
+                                        "10px",
+
+                                    cursor:
+                                        "pointer",
+
+                                    fontWeight:
+                                        "bold",
+                                }}
+                            >
+
+                                Delete Order 🗑
+
+                            </button>
+                        )}
 
                     </div>
 

@@ -1,261 +1,157 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+{orders.map((order) => (
 
-function AdminDashboard() {
+    <div
+        key={order._id}
 
-    const [pizzaData, setPizzaData] = useState({
-        name: "",
-        image: "",
-        price: "",
-        category: "",
-        baseOptions: "",
-        sauces: "",
-        cheeses: "",
-        veggies: "",
-    });
+        style={{
 
-    const [pizzas, setPizzas] = useState([]);
+            background:
+                "rgba(255,255,255,0.05)",
 
-    // fetch pizzas
-    const fetchPizzas = async () => {
+            padding:
+                "30px",
 
-        try {
+            borderRadius:
+                "20px",
 
-            const response = await axios.get(
-                "http://localhost:5000/api/pizzas"
-            );
+            marginBottom:
+                "30px",
+        }}
+    >
 
-            setPizzas(response.data);
+        <h2>
 
-        } catch (error) {
+            Order ID:
+            {" "}
+            {order._id}
 
-            console.log(error);
-        }
-    };
+        </h2>
 
-    useEffect(() => {
-        fetchPizzas();
-    }, []);
+        <p>
 
-    // handle input
-    const handleChange = (e) => {
+            Total:
+            {" "}
+            ₹{order.totalPrice}
 
-        setPizzaData({
-            ...pizzaData,
-            [e.target.name]: e.target.value,
-        });
-    };
+        </p>
 
-    // add pizza
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();
-
-        try {
-
-            const formattedData = {
-                ...pizzaData,
-                price: Number(pizzaData.price),
-
-                baseOptions:
-                    pizzaData.baseOptions.split(","),
-
-                sauces:
-                    pizzaData.sauces.split(","),
-
-                cheeses:
-                    pizzaData.cheeses.split(","),
-
-                veggies:
-                    pizzaData.veggies.split(","),
-            };
-
-            await axios.post(
-                "http://localhost:5000/api/pizzas",
-                formattedData
-            );
-
-            alert("Pizza Added 🍕");
-
-            fetchPizzas();
-
-            setPizzaData({
-                name: "",
-                image: "",
-                price: "",
-                category: "",
-                baseOptions: "",
-                sauces: "",
-                cheeses: "",
-                veggies: "",
-            });
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert("Error adding pizza");
-        }
-    };
-
-    // delete pizza
-    const deletePizza = async (id) => {
-
-        try {
-
-            await axios.delete(
-                `http://localhost:5000/api/pizzas/${id}`
-            );
-
-            alert("Pizza Deleted ❌");
-
-            fetchPizzas();
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert("Delete failed");
-        }
-    };
-
-    return (
-        <div
+        <h3
             style={{
-                marginTop: "50px",
-                padding: "20px",
-                border: "1px solid gray",
-                borderRadius: "10px",
+                marginTop:
+                    "20px",
             }}
         >
 
-            <h2>
-                Admin Dashboard 👨‍💼
-            </h2>
+            Ordered Items 🍕
 
-            {/* FORM */}
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    marginTop: "20px",
-                }}
-            >
+        </h3>
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Pizza Name"
-                    value={pizzaData.name}
-                    onChange={handleChange}
-                />
+        {order.items.map(
+            (item, index) => (
 
-                <input
-                    type="text"
-                    name="image"
-                    placeholder="Image URL"
-                    value={pizzaData.image}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="number"
-                    name="price"
-                    placeholder="Price"
-                    value={pizzaData.price}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="text"
-                    name="category"
-                    placeholder="Category"
-                    value={pizzaData.category}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="text"
-                    name="baseOptions"
-                    placeholder="Bases (comma separated)"
-                    value={pizzaData.baseOptions}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="text"
-                    name="sauces"
-                    placeholder="Sauces (comma separated)"
-                    value={pizzaData.sauces}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="text"
-                    name="cheeses"
-                    placeholder="Cheeses (comma separated)"
-                    value={pizzaData.cheeses}
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="text"
-                    name="veggies"
-                    placeholder="Veggies (comma separated)"
-                    value={pizzaData.veggies}
-                    onChange={handleChange}
-                />
-
-                <button type="submit">
-                    Add Pizza
-                </button>
-
-            </form>
-
-            {/* PIZZA LIST */}
             <div
+
+                key={index}
+
                 style={{
-                    marginTop: "40px",
+
+                    marginTop:
+                        "20px",
+
+                    padding:
+                        "15px",
+
+                    background:
+                        "rgba(255,255,255,0.03)",
+
+                    borderRadius:
+                        "12px",
                 }}
             >
 
-                <h3>All Pizzas</h3>
+                <h3>
 
-                {pizzas.map((pizza) => (
+                    {item.name}
 
-                    <div
-                        key={pizza._id}
-                        style={{
-                            border: "1px solid gray",
-                            padding: "10px",
-                            marginTop: "10px",
-                            borderRadius: "10px",
-                        }}
-                    >
+                    {" × "}
 
-                        <h4>{pizza.name}</h4>
+                    {item.quantity}
 
-                        <p>
-                            ₹{pizza.price}
-                        </p>
+                </h3>
 
-                        <button
-                            onClick={() =>
-                                deletePizza(pizza._id)
-                            }
-                        >
-                            Delete
-                        </button>
+                <p>
 
-                    </div>
-                ))}
+                    Size:
+                    {" "}
+
+                    {item.size || "N/A"}
+
+                </p>
+
+                <p>
+
+                    Base:
+                    {" "}
+
+                    {item.base || "N/A"}
+
+                </p>
+
+                <p>
+
+                    Sauce:
+                    {" "}
+
+                    {item.sauce || "N/A"}
+
+                </p>
+
+                <p>
+
+                    Cheese:
+                    {" "}
+
+                    {item.cheese || "N/A"}
+
+                </p>
+
+                <p>
+
+                    Veggies:
+                    {" "}
+
+                    {
+                        item.veggies &&
+                        item.veggies.length > 0
+
+                            ? item.veggies.join(
+                                ", "
+                            )
+
+                            : "None"
+                    }
+
+                </p>
 
             </div>
+        ))}
 
-        </div>
-    );
-}
+        <h3
+            style={{
+                marginTop:
+                    "25px",
 
-export default AdminDashboard;
+                color:
+                    "#ff0080",
+            }}
+        >
+
+            Current Status:
+            {" "}
+
+            {order.status}
+
+        </h3>
+
+    </div>
+))}

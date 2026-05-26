@@ -222,6 +222,8 @@ function CustomizePizzaModal({
 
             ...pizza,
 
+            quantity: 1,
+
             size,
 
             base,
