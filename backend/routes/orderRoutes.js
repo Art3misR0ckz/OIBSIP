@@ -5,167 +5,206 @@ const router = express.Router();
 const Order = require("../models/Order");
 
 const Inventory =
-require("../models/Inventory");
+    require("../models/Inventory");
+
 
 // PLACE ORDER
-router.post("/", async (req, res) => {
 
-    try {
+router.post(
+    "/",
 
-        const order = await Order.create({
+    async (req, res) => {
 
-            ...req.body,
+        try {
 
-            user: req.body.userId,
-        });
+            const order =
+                await Order.create({
 
-        res.status(201).json(order);
+                    ...req.body,
 
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
-        });
-    }
-});
-
-// AUTO REDUCE INVENTORY
-
-for (const item of items) {
-
-    // BASE
-
-    if (item.base) {
-
-        const base =
-            await Inventory.findOne({
-
-                ingredient:
-                    item.base,
-            });
-
-        if (base) {
-
-            base.stock -= 1;
-
-            await base.save();
-        }
-    }
-
-    // SAUCE
-
-    if (item.sauce) {
-
-        const sauce =
-            await Inventory.findOne({
-
-                ingredient:
-                    item.sauce,
-            });
-
-        if (sauce) {
-
-            sauce.stock -= 1;
-
-            await sauce.save();
-        }
-    }
-
-    // CHEESE
-
-    if (item.cheese) {
-
-        const cheese =
-            await Inventory.findOne({
-
-                ingredient:
-                    item.cheese,
-            });
-
-        if (cheese) {
-
-            cheese.stock -= 1;
-
-            await cheese.save();
-        }
-    }
-
-    // VEGGIES
-
-    if (
-        item.veggies &&
-        item.veggies.length > 0
-    ) {
-
-        for (
-            const veggie
-            of item.veggies
-        ) {
-
-            const veg =
-                await Inventory.findOne({
-
-                    ingredient:
-                        veggie,
+                    user:
+                        req.body.userId,
                 });
 
-            if (veg) {
 
-                veg.stock -= 1;
+            // AUTO REDUCE INVENTORY
 
-                await veg.save();
+            for (const item of req.body.items) {
+
+                // BASE
+
+                if (item.base) {
+
+                    const base =
+                        await Inventory.findOne({
+
+                            ingredient:
+                                item.base,
+                        });
+
+                    if (base) {
+
+                        base.stock -= 1;
+
+                        await base.save();
+                    }
+                }
+
+                // SAUCE
+
+                if (item.sauce) {
+
+                    const sauce =
+                        await Inventory.findOne({
+
+                            ingredient:
+                                item.sauce,
+                        });
+
+                    if (sauce) {
+
+                        sauce.stock -= 1;
+
+                        await sauce.save();
+                    }
+                }
+
+                // CHEESE
+
+                if (item.cheese) {
+
+                    const cheese =
+                        await Inventory.findOne({
+
+                            ingredient:
+                                item.cheese,
+                        });
+
+                    if (cheese) {
+
+                        cheese.stock -= 1;
+
+                        await cheese.save();
+                    }
+                }
+
+                // VEGGIES
+
+                if (
+                    item.veggies &&
+                    item.veggies.length > 0
+                ) {
+
+                    for (
+                        const veggie
+                        of item.veggies
+                    ) {
+
+                        const veg =
+                            await Inventory.findOne({
+
+                                ingredient:
+                                    veggie,
+                            });
+
+                        if (veg) {
+
+                            veg.stock -= 1;
+
+                            await veg.save();
+                        }
+                    }
+                }
             }
-        }
-    }
-}
 
+            res.status(201).json(
+                order
+            );
 
-// GET ORDERS
-router.get("/", async (req, res) => {
+        } catch (error) {
 
-    try {
+            res.status(500).json({
 
-        const orders = await Order.find();
-
-        res.json(orders);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
-        });
-    }
-});
-
-// UPDATE ORDER STATUS
-router.put("/:id", async (req, res) => {
-
-    try {
-
-        const order = await Order.findById(
-            req.params.id
-        );
-
-        if (!order) {
-
-            return res.status(404).json({
-                message: "Order not found",
+                message:
+                    error.message,
             });
         }
-
-        order.status = req.body.status;
-
-        const updatedOrder = await order.save();
-
-        res.json(updatedOrder);
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: error.message,
-        });
     }
-});
+);
+
+
+// GET ALL ORDERS
+
+router.get(
+    "/",
+
+    async (req, res) => {
+
+        try {
+
+            const orders =
+                await Order.find();
+
+            res.json(orders);
+
+        } catch (error) {
+
+            res.status(500).json({
+
+                message:
+                    error.message,
+            });
+        }
+    }
+);
+
+
+// UPDATE ORDER STATUS
+
+router.put(
+    "/:id",
+
+    async (req, res) => {
+
+        try {
+
+            const order =
+                await Order.findById(
+                    req.params.id
+                );
+
+            if (!order) {
+
+                return res
+                    .status(404)
+                    .json({
+
+                        message:
+                            "Order not found",
+                    });
+            }
+
+            order.status =
+                req.body.status;
+
+            const updatedOrder =
+                await order.save();
+
+            res.json(
+                updatedOrder
+            );
+
+        } catch (error) {
+
+            res.status(500).json({
+
+                message:
+                    error.message,
+            });
+        }
+    }
+);
+
 
 // GET USER ORDERS
 
@@ -188,6 +227,7 @@ router.get(
         } catch (error) {
 
             res.status(500).json({
+
                 message:
                     error.message,
             });
@@ -195,5 +235,5 @@ router.get(
     }
 );
 
-
-module.exports = router;
+module.exports =
+    router;

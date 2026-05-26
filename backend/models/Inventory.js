@@ -33,6 +33,11 @@ const inventorySchema =
 
             default: 5,
         },
+
+        prices: {
+            type: Number,
+            default: 0,
+        },
     });
 
 module.exports =
@@ -40,3 +45,4 @@ module.exports =
         "Inventory",
         inventorySchema
     );
+
