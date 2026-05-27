@@ -7,6 +7,9 @@ const Order = require("../models/Order");
 const Inventory =
     require("../models/Inventory");
 
+const sendLowStockEmail =
+    require("../utils/sendMail");
+
 
 // PLACE ORDER
 
@@ -60,6 +63,23 @@ router.post(
                         base.stock -= 1;
 
                         await base.save();
+
+
+                        // LOW STOCK EMAIL
+
+                        if (
+
+                            base.stock <=
+                            base.threshold
+                        ) {
+
+                            await sendLowStockEmail(
+
+                                base.ingredient,
+
+                                base.stock
+                            );
+                        }
                     }
                 }
 
@@ -90,6 +110,23 @@ router.post(
                         sauce.stock -= 1;
 
                         await sauce.save();
+
+
+                        // LOW STOCK EMAIL
+
+                        if (
+
+                            sauce.stock <=
+                            sauce.threshold
+                        ) {
+
+                            await sendLowStockEmail(
+
+                                sauce.ingredient,
+
+                                sauce.stock
+                            );
+                        }
                     }
                 }
 
@@ -120,6 +157,23 @@ router.post(
                         cheese.stock -= 1;
 
                         await cheese.save();
+
+
+                        // LOW STOCK EMAIL
+
+                        if (
+
+                            cheese.stock <=
+                            cheese.threshold
+                        ) {
+
+                            await sendLowStockEmail(
+
+                                cheese.ingredient,
+
+                                cheese.stock
+                            );
+                        }
                     }
                 }
 
@@ -160,6 +214,23 @@ router.post(
                             veg.stock -= 1;
 
                             await veg.save();
+
+
+                            // LOW STOCK EMAIL
+
+                            if (
+
+                                veg.stock <=
+                                veg.threshold
+                            ) {
+
+                                await sendLowStockEmail(
+
+                                    veg.ingredient,
+
+                                    veg.stock
+                                );
+                            }
                         }
                     }
                 }
@@ -254,6 +325,7 @@ router.put(
         }
     }
 );
+
 
 // DELETE ORDER
 
