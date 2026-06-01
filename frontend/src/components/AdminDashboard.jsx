@@ -1,157 +1,212 @@
-{orders.map((order) => (
+import { useState } from "react";
 
-    <div
-        key={order._id}
+import OrdersAdmin from "./OrdersAdmin";
 
-        style={{
+import InventoryAdmin from "./InventoryAdmin";
 
-            background:
-                "rgba(255,255,255,0.05)",
+import PizzaAdmin from "./PizzaAdmin";
 
-            padding:
-                "30px",
+import AddPizza from "./AddPizza";
 
-            borderRadius:
-                "20px",
+function AdminDashboard() {
 
-            marginBottom:
-                "30px",
-        }}
-    >
+    const [activeTab, setActiveTab] =
+        useState("orders");
 
-        <h2>
+    const buttonStyle = (tab) => ({
 
-            Order ID:
-            {" "}
-            {order._id}
+        padding: "14px 24px",
 
-        </h2>
+        border: "none",
 
-        <p>
+        borderRadius: "14px",
 
-            Total:
-            {" "}
-            ₹{order.totalPrice}
+        background:
+            activeTab === tab
+                ? "linear-gradient(90deg,#ff0080,#7928ca)"
+                : "#1f2937",
 
-        </p>
+        color: "white",
 
-        <h3
+        fontWeight: "bold",
+
+        fontSize: "16px",
+
+        cursor: "pointer",
+
+        transition: "0.3s",
+
+        boxShadow:
+            activeTab === tab
+                ? "0 0 20px rgba(255,0,150,0.4)"
+                : "none",
+    });
+
+    return (
+
+        <div
             style={{
-                marginTop:
-                    "20px",
+
+                marginTop: "60px",
+
+                padding: "20px",
             }}
         >
 
-            Ordered Items 🍕
+            {/* TITLE */}
 
-        </h3>
-
-        {order.items.map(
-            (item, index) => (
-
-            <div
-
-                key={index}
-
+            <h1
                 style={{
 
-                    marginTop:
-                        "20px",
+                    fontSize: "3rem",
 
-                    padding:
-                        "15px",
+                    marginBottom: "40px",
 
-                    background:
-                        "rgba(255,255,255,0.03)",
-
-                    borderRadius:
-                        "12px",
+                    textAlign: "center",
                 }}
             >
 
-                <h3>
+                Admin Dashboard ⚙️
 
-                    {item.name}
+            </h1>
 
-                    {" × "}
 
-                    {item.quantity}
+            {/* TAB BUTTONS */}
 
-                </h3>
+            <div
+                style={{
 
-                <p>
+                    display: "flex",
 
-                    Size:
-                    {" "}
+                    gap: "20px",
 
-                    {item.size || "N/A"}
+                    flexWrap: "wrap",
 
-                </p>
+                    justifyContent: "center",
 
-                <p>
+                    marginBottom: "50px",
+                }}
+            >
 
-                    Base:
-                    {" "}
+                <button
 
-                    {item.base || "N/A"}
+                    style={buttonStyle(
+                        "orders"
+                    )}
 
-                </p>
-
-                <p>
-
-                    Sauce:
-                    {" "}
-
-                    {item.sauce || "N/A"}
-
-                </p>
-
-                <p>
-
-                    Cheese:
-                    {" "}
-
-                    {item.cheese || "N/A"}
-
-                </p>
-
-                <p>
-
-                    Veggies:
-                    {" "}
-
-                    {
-                        item.veggies &&
-                        item.veggies.length > 0
-
-                            ? item.veggies.join(
-                                ", "
-                            )
-
-                            : "None"
+                    onClick={() =>
+                        setActiveTab(
+                            "orders"
+                        )
                     }
+                >
 
-                </p>
+                    Manage Orders 📦
+
+                </button>
+
+
+                <button
+
+                    style={buttonStyle(
+                        "inventory"
+                    )}
+
+                    onClick={() =>
+                        setActiveTab(
+                            "inventory"
+                        )
+                    }
+                >
+
+                    Inventory 🧀
+
+                </button>
+
+
+                <button
+
+                    style={buttonStyle(
+                        "pizzas"
+                    )}
+
+                    onClick={() =>
+                        setActiveTab(
+                            "pizzas"
+                        )
+                    }
+                >
+
+                    Manage Pizzas 🍕
+
+                </button>
+
+
+                <button
+
+                    style={buttonStyle(
+                        "addpizza"
+                    )}
+
+                    onClick={() =>
+                        setActiveTab(
+                            "addpizza"
+                        )
+                    }
+                >
+
+                    Add New Pizza ➕
+
+                </button>
 
             </div>
-        ))}
 
-        <h3
-            style={{
-                marginTop:
-                    "25px",
 
-                color:
-                    "#ff0080",
-            }}
-        >
+            {/* CONTENT AREA */}
 
-            Current Status:
-            {" "}
+            <div
+                style={{
 
-            {order.status}
+                    background:
+                        "rgba(255,255,255,0.04)",
 
-        </h3>
+                    padding: "30px",
 
-    </div>
-))}
+                    borderRadius: "24px",
+
+                    boxShadow:
+                        "0 0 30px rgba(255,0,150,0.08)",
+                }}
+            >
+
+                {activeTab ===
+                    "orders" && (
+
+                    <OrdersAdmin />
+                )}
+
+                {activeTab ===
+                    "inventory" && (
+
+                    <InventoryAdmin />
+                )}
+
+                {activeTab ===
+                    "pizzas" && (
+
+                    <PizzaAdmin />
+                )}
+
+                {activeTab ===
+                    "addpizza" && (
+
+                    <AddPizza />
+                )}
+
+            </div>
+
+        </div>
+    );
+}
+
+export default AdminDashboard;

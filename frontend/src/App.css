@@ -1,0 +1,34 @@
+.admin-tab-btn {
+
+    padding: 14px 24px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff0080,
+            #7928ca
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.admin-tab-btn:hover {
+
+    transform: scale(1.05);
+
+    box-shadow:
+        0 0 20px
+        rgba(255,0,150,0.4);
+}
