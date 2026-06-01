@@ -1,136 +1,94 @@
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 import axios from "axios";
+import "../styles/auth.css";
 
 function Register() {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [devLink, setDevLink] = useState("");
 
-    const [name, setName] =
-        useState("");
-
-    const [email, setEmail] =
-        useState("");
-
-    const [password, setPassword] =
-        useState("");
-
-    const handleRegister =
-        async (e) => {
-
+    const handleRegister = async (e) => {
         e.preventDefault();
 
         try {
-
-            const response =
-                await axios.post(
-
-                    "http://localhost:5000/api/auth/register",
-
-                    {
-                        name,
-                        email,
-                        password,
-                    }
-                );
-
-            localStorage.setItem(
-
-                "userInfo",
-
-                JSON.stringify(
-                    response.data
-                )
+            const { data } = await axios.post(
+                "http://localhost:5000/api/auth/register",
+                { name, email, password }
             );
 
-            localStorage.setItem(
-                "token",
-                response.data.token
-            );
+            setMessage(data.message);
 
-            alert(
-                "Registration Successful 🎉"
-            );
-
-            window.location.href = "/";
-
+            if (data.verificationToken) {
+                setDevLink(`/verify-email/${data.verificationToken}`);
+            }
         } catch (error) {
-
-            console.log(error);
-
-            alert(
-                "Registration Failed"
-            );
+            setMessage(error.response?.data?.message || "Registration failed");
         }
     };
 
     return (
-
         <div className="auth-page">
+            <div className="auth-glow glow-1" />
+            <div className="auth-glow glow-2" />
 
-            <form
-                className="auth-form"
+            <div className="auth-card">
+                <h1 className="auth-title">Create Account</h1>
+                <p className="auth-subtitle">Start your pizza order</p>
 
-                onSubmit={
-                    handleRegister
-                }
-            >
+                <form onSubmit={handleRegister}>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        className="auth-input"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
 
-                <h1>
-                    Register 📝
-                </h1>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        className="auth-input"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
 
-                <input
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        className="auth-input"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={6}
+                    />
 
-                    type="text"
+                    <button type="submit" className="auth-btn">
+                        Register
+                    </button>
+                </form>
 
-                    placeholder="Name"
+                {message && <p className="auth-message">{message}</p>}
 
-                    value={name}
+                {devLink && (
+                    <div className="auth-footer">
+                        <Link to={devLink} className="auth-link">
+                            Verify now
+                        </Link>
+                    </div>
+                )}
 
-                    onChange={(e) =>
-                        setName(
-                            e.target.value
-                        )
-                    }
-                />
-
-                <input
-
-                    type="email"
-
-                    placeholder="Email"
-
-                    value={email}
-
-                    onChange={(e) =>
-                        setEmail(
-                            e.target.value
-                        )
-                    }
-                />
-
-                <input
-
-                    type="password"
-
-                    placeholder="Password"
-
-                    value={password}
-
-                    onChange={(e) =>
-                        setPassword(
-                            e.target.value
-                        )
-                    }
-                />
-
-                <button type="submit">
-
-                    Register
-
-                </button>
-
-            </form>
-
+                <div className="auth-footer">
+                    Already registered?{" "}
+                    <Link to="/login" className="auth-link">
+                        Login
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }

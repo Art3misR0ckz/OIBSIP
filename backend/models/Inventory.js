@@ -34,7 +34,7 @@ const inventorySchema =
             default: 5,
         },
 
-        prices: {
+        price: {
             type: Number,
             default: 0,
         },

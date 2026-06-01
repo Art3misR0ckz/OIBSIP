@@ -19,6 +19,9 @@ function InventoryAdmin() {
     const [threshold, setThreshold] =
         useState("");
 
+    const [price, setPrice] =
+        useState("");
+
     // FETCH INVENTORY
 
     const fetchInventory =
@@ -65,6 +68,7 @@ function InventoryAdmin() {
                     category,
                     stock,
                     threshold,
+                    price,
                 }
             );
 
@@ -76,6 +80,7 @@ function InventoryAdmin() {
             setCategory("");
             setStock("");
             setThreshold("");
+            setPrice("");
 
             fetchInventory();
 
@@ -106,6 +111,8 @@ function InventoryAdmin() {
                     stock: newStock,
                     threshold:
                         item.threshold,
+                    price:
+                        item.price,
                 }
             );
 
@@ -203,20 +210,34 @@ function InventoryAdmin() {
                     }
                 />
 
-                <input
-
-                    type="text"
-
-                    placeholder="Category"
-
+                <select
                     value={category}
-
                     onChange={(e) =>
                         setCategory(
                             e.target.value
                         )
                     }
-                />
+                    required
+                >
+                    <option value="">
+                        Select Category
+                    </option>
+                    <option value="Base">
+                        Base
+                    </option>
+                    <option value="Sauce">
+                        Sauce
+                    </option>
+                    <option value="Cheese">
+                        Cheese
+                    </option>
+                    <option value="Veggie">
+                        Veggie
+                    </option>
+                    <option value="Meat">
+                        Meat
+                    </option>
+                </select>
 
                 <input
 
@@ -228,6 +249,21 @@ function InventoryAdmin() {
 
                     onChange={(e) =>
                         setStock(
+                            e.target.value
+                        )
+                    }
+                />
+
+                <input
+
+                    type="number"
+
+                    placeholder="Extra Price"
+
+                    value={price}
+
+                    onChange={(e) =>
+                        setPrice(
                             e.target.value
                         )
                     }
@@ -326,6 +362,18 @@ function InventoryAdmin() {
 
                             {
                                 item.threshold
+                            }
+
+                        </p>
+
+                        <p>
+
+                            Price:
+                            {" "}
+
+                            ₹
+                            {
+                                item.price || 0
                             }
 
                         </p>

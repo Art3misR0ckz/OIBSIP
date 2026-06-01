@@ -37,6 +37,8 @@ const orderSchema =
 
                 cheese: String,
 
+                meat: String,
+
                 veggies: [String],
             },
         ],
@@ -55,6 +57,8 @@ const orderSchema =
             default:
                 "Order Received",
         },
+
+        paymentId: String,
 
     },
 

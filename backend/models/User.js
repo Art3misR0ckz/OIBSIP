@@ -74,7 +74,7 @@ userSchema.pre(
             )
         ) {
 
-            next();
+            return next();
         }
 
         const salt =
@@ -89,6 +89,8 @@ userSchema.pre(
 
                 salt
             );
+
+        next();
     }
 );
 

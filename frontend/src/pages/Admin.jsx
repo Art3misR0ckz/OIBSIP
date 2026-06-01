@@ -25,19 +25,19 @@ function Admin() {
     const [category, setCategory] =
         useState("");
 
-    const userInfo = JSON.parse(
-        localStorage.getItem(
-            "userInfo"
-        )
-    );
-
     // PROTECT ADMIN PAGE
 
     useEffect(() => {
 
+        const storedUser = JSON.parse(
+            localStorage.getItem(
+                "userInfo"
+            )
+        );
+
         if (
-            !userInfo ||
-            !userInfo.isAdmin
+            !storedUser ||
+            !storedUser.isAdmin
         ) {
 
             window.location.href =

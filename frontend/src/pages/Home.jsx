@@ -52,20 +52,16 @@ function Home() {
         pizza
     ) => {
 
+        const incomingKey =
+            pizza.cartKey ||
+            `${pizza._id}-${pizza.size || ""}-${pizza.base || ""}-${pizza.sauce || ""}-${pizza.cheese || ""}-${(pizza.veggies || []).join("|")}`;
+
         const existingPizza =
             cart.find(
 
                 (item) =>
 
-                    item._id === pizza._id &&
-
-                    item.size === pizza.size &&
-
-                    item.base === pizza.base &&
-
-                    item.sauce === pizza.sauce &&
-
-                    item.cheese === pizza.cheese
+                    item.cartKey === incomingKey
             );
 
         if (existingPizza) {
@@ -97,6 +93,9 @@ function Home() {
                 {
                     ...pizza,
 
+                    cartKey:
+                        incomingKey,
+
                     quantity: 1,
                 },
             ]);
@@ -106,12 +105,12 @@ function Home() {
     // REMOVE ITEM
 
     const removeFromCart =
-        (pizzaId) => {
+        (cartKey) => {
 
         const updatedCart =
             cart.filter(
                 (item) =>
-                    item._id !== pizzaId
+                    item.cartKey !== cartKey
             );
 
         setCart(updatedCart);
@@ -137,6 +136,18 @@ function Home() {
         async () => {
 
         try {
+
+            if (!userInfo) {
+
+                alert(
+                    "Please login before placing an order"
+                );
+
+                window.location.href =
+                    "/login";
+
+                return;
+            }
 
             const response =
                 await axios.post(
@@ -173,7 +184,7 @@ function Home() {
                     order.id,
 
                 handler:
-                    async function () {
+                    async function (paymentResponse) {
 
                         try {
 
@@ -189,6 +200,9 @@ function Home() {
 
                                     userId:
                                         userInfo._id,
+
+                                    paymentId:
+                                        paymentResponse.razorpay_payment_id,
                                 }
                             );
 
@@ -311,7 +325,7 @@ function Home() {
 
                             <div
 
-                                key={item._id}
+                                key={item.cartKey}
 
                                 className="
                                 cart-item
@@ -423,7 +437,7 @@ function Home() {
 
                                         onClick={() =>
                                             removeFromCart(
-                                                item._id
+                                                item.cartKey
                                             )
                                         }
                                     >
@@ -496,6 +510,18 @@ function Home() {
                                 onClick={async () => {
 
                                     try {
+
+                                        if (!userInfo) {
+
+                                            alert(
+                                                "Please login before placing an order"
+                                            );
+
+                                            window.location.href =
+                                                "/login";
+
+                                            return;
+                                        }
 
                                         await axios.post(
 

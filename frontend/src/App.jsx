@@ -19,6 +19,9 @@ import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 
 import Orders from "./pages/Orders";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
 
@@ -53,6 +56,21 @@ function App() {
                 <Route
                     path="/orders"
                     element={<Orders />}
+                />
+
+                <Route
+                    path="/forgot-password"
+                    element={<ForgotPassword />}
+                />
+
+                <Route
+                    path="/reset-password/:token"
+                    element={<ResetPassword />}
+                />
+
+                <Route
+                    path="/verify-email/:token"
+                    element={<VerifyEmail />}
                 />
 
             </Routes>

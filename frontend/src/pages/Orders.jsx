@@ -13,32 +13,37 @@ function Orders() {
         )
     );
 
-    const fetchOrders =
-        async () => {
+    useEffect(() => {
 
-        try {
+        const fetchOrders =
+            async () => {
 
-            const response =
-                await axios.get(
+            try {
 
-                    `http://localhost:5000/api/orders/user/${userInfo._id}`
+                if (!userInfo?._id) {
+
+                    return;
+                }
+
+                const response =
+                    await axios.get(
+
+                        `http://localhost:5000/api/orders/user/${userInfo._id}`
+                    );
+
+                setOrders(
+                    response.data
                 );
 
-            setOrders(
-                response.data
-            );
+            } catch (error) {
 
-        } catch (error) {
-
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
+                console.log(error);
+            }
+        };
 
         fetchOrders();
 
-    }, []);
+    }, [userInfo?._id]);
 
     return (
 

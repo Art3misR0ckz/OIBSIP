@@ -374,11 +374,11 @@ function OrdersAdmin() {
                             </option>
 
                             <option>
-                                Preparing
+                                In the Kitchen
                             </option>
 
                             <option>
-                                Out For Delivery
+                                Sent to Delivery
                             </option>
 
                             <option>
