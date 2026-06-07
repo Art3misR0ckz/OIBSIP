@@ -5,40 +5,40 @@ const express =
 const router =
     express.Router();
 
-const authController =
-    require(
-        "../controllers/authController"
-    );
+const {
 
+    registerUser,
 
-// REGISTER
+    loginUser,
+
+    forgotPassword,
+
+    resetPassword,
+
+} = require(
+    "../controllers/authController"
+);
 
 router.post(
-
     "/register",
-
-    authController.registerUser
+    registerUser
 );
 
-
-// LOGIN
-
 router.post(
-
     "/login",
-
-    authController.loginUser
+    loginUser
 );
 
-
-// FORGOT PASSWORD
+router.post(
+    "/forgot-password",
+    forgotPassword
+);
 
 router.post(
-
-    "/forgot-password",
-
-    authController.forgotPassword
+    "/reset-password/:token",
+    resetPassword
 );
 
 module.exports =
     router;
+

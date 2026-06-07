@@ -272,6 +272,80 @@ const forgotPassword =
     };
 
 
+const resetPassword =
+    async (
+        req,
+        res
+    ) => {
+
+        try {
+
+            const { token } =
+                req.params;
+
+            const { password } =
+                req.body;
+
+            const user =
+                await User.findOne({
+
+                    resetPasswordToken:
+                        token,
+
+                    resetPasswordExpire: {
+
+                        $gt:
+                            Date.now(),
+                    },
+                });
+
+            if (!user) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Invalid or expired token",
+                    });
+            }
+
+            // UPDATE PASSWORD
+
+            user.password =
+                password;
+
+            // CLEAR RESET FIELDS
+
+            user.resetPasswordToken =
+                undefined;
+
+            user.resetPasswordExpire =
+                undefined;
+
+            await user.save();
+
+            res.json({
+
+                message:
+                    "Password reset successful",
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).json({
+
+                message:
+                    error.message,
+            });
+        }
+    };
+
+
+
+
 module.exports = {
 
     registerUser,
@@ -279,4 +353,6 @@ module.exports = {
     loginUser,
 
     forgotPassword,
+
+    resetPassword,
 };
