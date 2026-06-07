@@ -1,4 +1,3 @@
-
 const User =
     require("../models/User");
 
@@ -10,6 +9,11 @@ const crypto =
 
 const sendResetEmail =
     require("../utils/sendResetEmail");
+
+const sendVerificationEmail =
+    require(
+        "../utils/sendVerificationEmail"
+    );
 
 
 // GENERATE TOKEN
@@ -52,6 +56,8 @@ const registerUser =
 
             } = req.body;
 
+            // CHECK USER
+
             const userExists =
                 await User.findOne({
 
@@ -69,6 +75,8 @@ const registerUser =
                     });
             }
 
+            // CREATE USER
+
             const user =
                 await User.create({
 
@@ -78,6 +86,40 @@ const registerUser =
 
                     password,
                 });
+
+
+            // GENERATE VERIFICATION TOKEN
+
+            const verificationToken =
+
+                crypto.randomBytes(
+                    32
+                ).toString("hex");
+
+            user.verificationToken =
+                verificationToken;
+
+            await user.save();
+
+
+            // VERIFICATION LINK
+
+            const verificationLink =
+
+                `http://localhost:5173/verify-email/${verificationToken}`;
+
+
+            // SEND EMAIL
+
+            await sendVerificationEmail(
+
+                user.email,
+
+                verificationLink
+            );
+
+
+            // RESPONSE
 
             res.status(201).json({
 
@@ -92,6 +134,9 @@ const registerUser =
 
                 isAdmin:
                     user.isAdmin,
+
+                isVerified:
+                    user.isVerified,
 
                 token:
                     generateToken(
@@ -147,6 +192,23 @@ const loginUser =
                     });
             }
 
+
+            // EMAIL VERIFICATION CHECK
+
+            if (!user.isVerified) {
+
+                return res
+                    .status(401)
+                    .json({
+
+                        message:
+                            "Please verify your email first",
+                    });
+            }
+
+
+            // CHECK PASSWORD
+
             const isMatch =
                 await user.matchPassword(
                     password
@@ -163,6 +225,8 @@ const loginUser =
                     });
             }
 
+            // LOGIN SUCCESS
+
             res.json({
 
                 _id:
@@ -176,6 +240,9 @@ const loginUser =
 
                 isAdmin:
                     user.isAdmin,
+
+                isVerified:
+                    user.isVerified,
 
                 token:
                     generateToken(
@@ -272,6 +339,8 @@ const forgotPassword =
     };
 
 
+// RESET PASSWORD
+
 const resetPassword =
     async (
         req,
@@ -315,7 +384,7 @@ const resetPassword =
             user.password =
                 password;
 
-            // CLEAR RESET FIELDS
+            // CLEAR TOKENS
 
             user.resetPasswordToken =
                 undefined;
@@ -344,6 +413,62 @@ const resetPassword =
     };
 
 
+// VERIFY EMAIL
+
+const verifyEmail =
+    async (
+        req,
+        res
+    ) => {
+
+        try {
+
+            const { token } =
+                req.params;
+
+            const user =
+                await User.findOne({
+
+                    verificationToken:
+                        token,
+                });
+
+            if (!user) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Invalid token",
+                    });
+            }
+
+            user.isVerified =
+                true;
+
+            user.verificationToken =
+                undefined;
+
+            await user.save();
+
+            res.json({
+
+                message:
+                    "Email verified successfully",
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).json({
+
+                message:
+                    error.message,
+            });
+        }
+    };
 
 
 module.exports = {
@@ -355,4 +480,6 @@ module.exports = {
     forgotPassword,
 
     resetPassword,
+
+    verifyEmail,
 };
