@@ -23,6 +23,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 
+import AdminRoute from "./components/AdminRoute";
+
 function App() {
 
     return (
@@ -50,7 +52,14 @@ function App() {
 
                 <Route
                     path="/admin"
-                    element={<Admin />}
+                    element={
+
+                        <AdminRoute>
+
+                            <Admin />
+
+                        </AdminRoute>
+                    }
                 />
 
                 <Route

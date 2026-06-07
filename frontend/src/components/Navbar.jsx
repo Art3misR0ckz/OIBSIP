@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -8,11 +9,11 @@ function Navbar() {
 
     const logoutHandler = () => {
 
-        localStorage.removeItem("token");
+        localStorage.removeItem(
+            "userInfo"
+        );
 
-        localStorage.removeItem("userInfo");
-
-        window.location.href = "/";
+        window.location.href = "/login";
     };
 
     return (
@@ -42,6 +43,7 @@ function Navbar() {
                 {!userInfo ? (
 
                     <>
+
                         <Link to="/login">
                             Login
                         </Link>
@@ -49,30 +51,32 @@ function Navbar() {
                         <Link to="/register">
                             Register
                         </Link>
+
                     </>
 
                 ) : (
 
                     <>
+
                         {userInfo.isAdmin && (
 
                             <Link to="/admin">
                                 Admin
                             </Link>
+
                         )}
 
                         <button
-                            className="
-                            logout-btn
-                            "
-
-                            onClick={
-                                logoutHandler
-                            }
+                            className="logout-btn"
+                            onClick={logoutHandler}
                         >
+
                             Logout
+
                         </button>
+
                     </>
+
                 )}
 
             </div>
