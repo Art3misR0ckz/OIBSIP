@@ -5,68 +5,71 @@ const bcrypt =
     require("bcryptjs");
 
 const userSchema =
-    new mongoose.Schema({
+    new mongoose.Schema(
 
-        name: {
+        {
 
-            type: String,
+            name: {
 
-            required: true,
+                type: String,
+
+                required: true,
+            },
+
+            email: {
+
+                type: String,
+
+                required: true,
+
+                unique: true,
+            },
+
+            password: {
+
+                type: String,
+
+                required: true,
+            },
+
+            isAdmin: {
+
+                type: Boolean,
+
+                default: false,
+            },
+
+            isVerified: {
+
+                type: Boolean,
+
+                default: false,
+            },
+
+            verificationToken:
+                String,
+
+            resetPasswordToken:
+                String,
+
+            resetPasswordExpire:
+                Date,
         },
 
-        email: {
+        {
 
-            type: String,
-
-            required: true,
-
-            unique: true,
-        },
-
-        password: {
-
-            type: String,
-
-            required: true,
-        },
-
-        isAdmin: {
-
-            type: Boolean,
-
-            default: false,
-        },
-
-        isVerified: {
-
-            type: Boolean,
-
-            default: false,
-        },
-
-        verificationToken:
-            String,
-
-        resetPasswordToken:
-            String,
-
-        resetPasswordExpire:
-            Date,
-    },
-
-    {
-
-        timestamps: true,
-    }
-);
+            timestamps: true,
+        }
+    );
 
 
 // HASH PASSWORD
 
 userSchema.pre(
+
     "save",
 
-    async function (next) {
+    async function () {
 
         if (
             !this.isModified(
@@ -74,7 +77,7 @@ userSchema.pre(
             )
         ) {
 
-            return next();
+            return;
         }
 
         const salt =
@@ -89,8 +92,6 @@ userSchema.pre(
 
                 salt
             );
-
-        next();
     }
 );
 
@@ -115,3 +116,4 @@ module.exports =
         "User",
         userSchema
     );
+

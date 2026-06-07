@@ -42,6 +42,7 @@ app.use(
     paymentRoutes
 );
 app.use("/api/inventory", inventoryRoutes);
+app.use("/api/users",require("./routes/authRoutes"));
 
 // test route
 app.get("/", (req, res) => {
